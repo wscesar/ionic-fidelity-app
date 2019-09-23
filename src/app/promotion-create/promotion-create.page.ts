@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { LoadingController } from '@ionic/angular';
 
 import { PromotionService } from '../shared/promotion.service';
+import { Promotion } from '../shared/promotion.model';
 
 @Component({
   selector: 'app-promotion-create',
@@ -12,14 +13,22 @@ import { PromotionService } from '../shared/promotion.service';
 })
 export class PromotionCreatePage implements OnInit {
     form: FormGroup;
+    promotionList: Promotion[];
+    promotion: Promotion;
+    paramPlace: string;
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private promotionService: PromotionService,
-        private loadingCtrl: LoadingController
+        private loadingCtrl: LoadingController,
     ) {}
 
     ngOnInit() {
+        this.paramPlace =  this.route.snapshot.paramMap.get('place');
+
+        this.promotionList = this.promotionService.promotions; 
+
         this.form = new FormGroup({
             
             promotion: new FormControl(null, {
@@ -35,6 +44,17 @@ export class PromotionCreatePage implements OnInit {
         });
     }
 
-    
+    onFormSubmit() {
+
+        const newPromotion = new Promotion (
+            this.paramPlace,
+            this.form.value.promotion,
+            this.form.value.score,
+            'https://static.thenounproject.com/png/1174579-200.png'
+        );
+        
+        this.promotionService.promotions.push(newPromotion);
+
+    }
 
 }

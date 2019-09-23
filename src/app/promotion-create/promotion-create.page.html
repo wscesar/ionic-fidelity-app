@@ -5,11 +5,11 @@
   </ion-header>
   
   <ion-content padding>
-    <form [formGroup]="form" (submit)="onInsertData()">
-      
+    <form [formGroup]="form" (submit)="onFormSubmit()">
+    
       <ion-item>
         <ion-label position="floating">Promoção</ion-label>
-        <ion-input formControlName="place"></ion-input>
+        <ion-input formControlName="promotion"></ion-input>
       </ion-item>
   
       <ion-item>
@@ -17,9 +17,8 @@
         <ion-input formControlName="score"></ion-input>
       </ion-item>
   
-      <ion-button type="submit"  expand="block">Salvar</ion-button>
+      <ion-button type="submit" expand="block">Salvar</ion-button>
   
     </form>
-  
-  </ion-content>
+</ion-content>
   
