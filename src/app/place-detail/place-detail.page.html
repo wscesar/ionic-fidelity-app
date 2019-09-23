@@ -25,27 +25,27 @@
 
             <ion-list>
 
-                    <div *ngFor="let promotion of promotions">
+                <div *ngFor="let promotion of promotions">
+        
+                    <ion-item
+                        detail
+                        *ngIf="promotion.store === paramPlace"
+                        [routerLink]="['/', 'promocoes', promotion.store, promotion.title]" >
+        
+                        <ion-thumbnail>
+                            <ion-img [src]="promotion.image"></ion-img>
+                        </ion-thumbnail>
             
-                        <ion-item
-                            detail
-                            *ngIf="promotion.store === paramPlace"
-                            [routerLink]="['/', 'promocoes', promotion.store, promotion.title]" >
+                        <ion-label>
+                            <h2>{{ promotion.title }}</h2>
+                            <p>Pontos: {{ promotion.score }}</p>
+                        </ion-label>
+        
+                    </ion-item>
+                    
+                </div>
             
-                            <ion-thumbnail>
-                                <ion-img [src]="promotion.image"></ion-img>
-                            </ion-thumbnail>
-                
-                            <ion-label>
-                                <h2>{{ promotion.title }}</h2>
-                                <p>Pontos: {{ promotion.score }}</p>
-                            </ion-label>
-            
-                        </ion-item>
-                        
-                    </div>
-              
-                </ion-list>  
+            </ion-list>  
 
         </ion-col>
 

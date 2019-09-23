@@ -50,11 +50,11 @@ export class PromotionDetailPage implements OnInit {
         //     this.placeList = places;
         // });
         
-        this.getStoreData();
+        this.getPlaceData();
         this.getData();
     }
 
-     getStoreData() {
+     getPlaceData() {
 
         let places = this.placeList;
 
@@ -84,7 +84,7 @@ export class PromotionDetailPage implements OnInit {
 
     toggleButton() {
         let places = this.placeList;
-        for ( let i = 0 ; i < places.length ; i++ )  {
+        for ( let i = 0 ; i < places.length ; i++ ) {
             if ( places[i].title === this.paramPlace ) {
                 if (this.placeList[i].score < this.productScore){
                     this.disableButton = true;

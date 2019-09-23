@@ -86,12 +86,11 @@ export class PlaceService {
     }
 
     
-
     addPlace( title: string, score: number) {
-        let generatedId: string;
+        let firebaseId: string;
 
         const newPlace = new Place (
-          Math.random().toString(),
+          null, // Math.random().toString(),
           title,
           'https://static.thenounproject.com/png/1174579-200.png',
           score
@@ -100,18 +99,18 @@ export class PlaceService {
         return this.http
             .post<{ name: string }> (
                 'https://fidelity-database.firebaseio.com/places.json',
-                { ...newPlace, id: null }
+                { ...newPlace }
             )
             .pipe (
                 switchMap(response => {
-                    generatedId = response.name;
+                    firebaseId = response.name;
                     return this.getPlaces;
                 }),
             
                 take(1),
                 
                 tap ( places => {
-                    newPlace.id = generatedId;
+                    newPlace.id = firebaseId;
                     this._places.next(places.concat(newPlace));
             })
           );
