@@ -5,7 +5,7 @@ import { Place } from '../shared/place.model';
 import { Promotion } from '../shared/promotion.model';
 import { PlaceService } from '../shared/place.service';
 import { PromotionService } from '../shared/promotion.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,7 +20,7 @@ export class PromotionDetailPage implements OnInit {
     image: string;
     productScore: number;
     userScore: number;
-    paramStore: string;
+    paramPlace: string;
     paramPromotion: string;
     placeList: Place[];
     promotionList: Promotion[];
@@ -30,9 +30,10 @@ export class PromotionDetailPage implements OnInit {
 
     constructor (
         private route: ActivatedRoute,
+        private navCtrl: NavController,
+        private alertCtrl: AlertController,
         private placeService: PlaceService,
         private promotionService: PromotionService,
-        private alertCtrl: AlertController,
     ) { }
 
     ionViewDidEnter(){
@@ -40,7 +41,7 @@ export class PromotionDetailPage implements OnInit {
     }
 
     ngOnInit() {
-        this.paramStore = this.route.snapshot.paramMap.get("store");
+        this.paramPlace = this.route.snapshot.paramMap.get("place");
         this.paramPromotion = this.route.snapshot.paramMap.get("promotion");
         this.promotionList = this.promotionService.promotions;
         
@@ -58,7 +59,7 @@ export class PromotionDetailPage implements OnInit {
         let places = this.placeList;
 
         for ( let i = 0 ; i < places.length ; i++ )  {
-            if ( places[i].title === this.paramStore ) {
+            if ( places[i].title === this.paramPlace ) {
                 this.userScore = places[i].score;
                 return i;
             }
@@ -72,7 +73,7 @@ export class PromotionDetailPage implements OnInit {
     for ( let i = 0 ; i < promo.length ; i++ )  {
         if (
             promo[i].title === this.paramPromotion &&
-            promo[i].store === this.paramStore
+            promo[i].store === this.paramPlace
            ) {
             this.title = promo[i].title;
             this.image = promo[i].image;
@@ -84,7 +85,7 @@ export class PromotionDetailPage implements OnInit {
     toggleButton() {
         let places = this.placeList;
         for ( let i = 0 ; i < places.length ; i++ )  {
-            if ( places[i].title === this.paramStore ) {
+            if ( places[i].title === this.paramPlace ) {
                 if (this.placeList[i].score < this.productScore){
                     this.disableButton = true;
                 }
@@ -101,7 +102,7 @@ export class PromotionDetailPage implements OnInit {
             let places = this.placeList;
             
             for ( let i = 0 ; i < places.length ; i++ )  {
-                if ( places[i].title === this.paramStore ) {
+                if ( places[i].title === this.paramPlace ) {
                     this.placeList[i].score = this.userScore 
                 }
             }
@@ -116,17 +117,11 @@ export class PromotionDetailPage implements OnInit {
                 })
                 .then(alertEl => {
                     alertEl.present();
-                }) ;
+                    this.navCtrl.navigateBack('/');
+                })
+                
         } else {
             this.disableButton = true;
-            // this.alertCtrl
-            //     .create({
-            //         header: 'Ops',
-            //         message: 'Você não tem pontos suficientes para resgatar essa promoção'
-            //     })
-            //     .then(alertEl => {
-            //         alertEl.present();
-            //     });
         }
 
     }
