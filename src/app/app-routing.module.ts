@@ -11,8 +11,12 @@ const routes: Routes = [
         path: 'promocoes',
         children: [
             {
-                path: ':store',
+                path: ':place',
                 children: [
+                    {
+                        path: 'criar-promocao', 
+                        loadChildren: './promotion-create/promotion-create.module#PromotionCreatePageModule'
+                    },
                     {
                         path: ':promotion', 
                         loadChildren: './promotion-detail/promotion-detail.module#PromotionDetailPageModule'
