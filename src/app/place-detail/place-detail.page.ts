@@ -14,9 +14,8 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 })
 export class PlaceDetailPage implements OnInit {
 
-    private subscription: Subscription;
     paramPlace: string;
-    places: Place[];
+    place: Place;
     promotions: Promotion[];
     lenght: number = 0;
     arr: [];
@@ -27,31 +26,16 @@ export class PlaceDetailPage implements OnInit {
         private promotionService: PromotionService
     ) { }
 
-    ionViewWillEnter() {
-        this.placeService.fetchPlaces().subscribe(() => {
-        //   this.isLoading = false;
-        });
-    }
-
     ngOnInit() {
 
-        // this.subscription = this.placeService.getPlaces.subscribe(places => {
-        //     console.log(places)
-        // });
-
-        this.paramPlace = this.route.snapshot.paramMap.get("store");
+        this.paramPlace = this.route.snapshot.paramMap.get("place");
+        
         this.promotions = this.promotionService.promotions;
-        this.places = this.placeService.places;
-    }
 
-    calcLenght() {
-        let n = 0;
-        for ( let i = 0 ; i < this.promotions.length ; i++ ) {
-            if ( this.promotions[i].store === this.paramPlace ) {
-                n++;
-            }
-        }
-        return n;
+        this.place = this.placeService.places.find(
+            place => place.title === this.paramPlace
+        );
+
     }
 
 }
