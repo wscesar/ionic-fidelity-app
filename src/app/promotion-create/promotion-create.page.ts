@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController, NavController } from '@ionic/angular';
 
 import { PromotionService } from '../shared/promotion.service';
 import { Promotion } from '../shared/promotion.model';
@@ -22,6 +22,8 @@ export class PromotionCreatePage implements OnInit {
         private route: ActivatedRoute,
         private promotionService: PromotionService,
         private loadingCtrl: LoadingController,
+        private navCtrl: NavController,
+        private alertCtrl: AlertController
     ) {}
 
     ngOnInit() {
@@ -54,6 +56,16 @@ export class PromotionCreatePage implements OnInit {
         );
         
         this.promotionService.promotions.push(newPromotion);
+
+        this.alertCtrl
+        .create({
+            header: 'Ok',
+            message: 'Promocao cadastrada com sucesso'
+        })
+        .then(alertEl => {
+            alertEl.present();
+            this.navCtrl.navigateBack(`/promocoes/${this.paramPlace}`);
+        })
 
     }
 
