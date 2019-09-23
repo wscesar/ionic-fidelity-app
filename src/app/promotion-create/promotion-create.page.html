@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Criar Promoção</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <form [formGroup]="form" (submit)="onInsertData()">
+      
+      <ion-item>
+        <ion-label position="floating">Promoção</ion-label>
+        <ion-input formControlName="place"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="floating">Pontos</ion-label>
+        <ion-input formControlName="score"></ion-input>
+      </ion-item>
+  
+      <ion-button type="submit"  expand="block">Salvar</ion-button>
+  
+    </form>
+  
+  </ion-content>
+  

@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+        
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>Promoções</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row *ngFor="let promotion of promotions">
+
+    <ion-col size-md="6" offset-sm="3" class="ion-text-center">
+          
+        <ion-item detail [routerLink]="['/', 'promocoes', promotion.store, promotion.title]">
+
+            <ion-label>
+                <ion-avatar>
+                    <ion-img [src]="promotion.image"></ion-img>
+                </ion-avatar>
+            </ion-label>
+
+            <ion-label>
+                <h2>{{ promotion.title }}</h2>
+                <p>{{ promotion.store }}</p>
+            </ion-label>
+            
+            <ion-label>
+                <p>Pontos: {{ promotion.score }}</p>
+            </ion-label>
+
+            <!-- <ion-button [routerLink]="['/', promotion.store, promotion.title]">Resgatar</ion-button> -->
+
+          </ion-item>
+        
+      </ion-col>
+
+    </ion-row>
+
+</ion-content>

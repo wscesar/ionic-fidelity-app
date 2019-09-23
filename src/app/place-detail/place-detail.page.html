@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{paramPlace}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+  
+<ion-content>
+    
+    <div *ngFor="let place of places">
+        <ion-row *ngIf="place.title === paramPlace">
+            
+            <ion-col size-md="6" offset-md="3">
+            
+                <ion-img [src]="place.image"></ion-img>
+                
+                <ion-label text-center>
+                    <h2>Promoções Disponíveis</h2>
+                </ion-label>
+
+            </ion-col>
+
+        </ion-row>  
+    </div>
+  
+    <ion-list>
+
+        <div *ngFor="let promotion of promotions">
+
+            <ion-item
+                detail
+                *ngIf="promotion.store === paramPlace"
+                [routerLink]="['/', 'promocoes', promotion.store, promotion.title]" >
+
+                <ion-thumbnail>
+                    <ion-img [src]="promotion.image"></ion-img>
+                </ion-thumbnail>
+    
+                <ion-label>
+                    <h2>{{ promotion.title }}</h2>
+                    <p>Pontos: {{ promotion.score }}</p>
+                </ion-label>
+
+            </ion-item>
+            
+        </div>
+  
+    </ion-list>  
+    
+</ion-content>
+  

@@ -1,0 +1,8 @@
+{
+  "name": "fidelity-app",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Meus Pontos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-row>
+        <ion-col size-md="6" offset-sm="3" class="ion-text-center">
+            <ion-virtual-scroll [items]="places" approxItemHeight="70px">
+                <div *virtualItem="let place">
+                    <ion-item>
+              
+                        <ion-thumbnail slot="start" color="dark">
+                            <ion-img [src]="place.image"></ion-img>
+                        </ion-thumbnail>
+  
+                        <ion-label>
+                            <h2>{{ place.title }}</h2>
+                            <p>Meus pontos: {{ place.score }}</p>
+                        </ion-label>
+
+                        <ion-button
+                            [disabled]="!hasPromotion(place.title)"
+                            [routerLink]="['/', 'promocoes', place.title]">Promoções</ion-button>
+  
+                    </ion-item>
+                </div>
+            </ion-virtual-scroll>
+        </ion-col>
+      </ion-row>
+</ion-content>
