@@ -34,22 +34,16 @@ export class UserScorePage implements OnInit {
         this.promotions = this.promotionService.promotions;
     }
 
-  hasPromotion ( placeId: string ) {
-    let p = this.promotions;
-    let x = 0;
+    hasPromotion ( placeId: string ) {
+        let promotions = this.promotions;
 
-    for(let i=0; i < p.length; i++) {
-      if (p[i].store === placeId) {
-        x++;
-      }
-    }
-    
-    if (x > 0) {
-      return true
-    } else {
-      return false ;
-    }
+        for ( let key in promotions ) {
+            if (promotions[key].store === placeId) {
+                return true;
+            }
+        }
 
-  }
+        return false;
+    }
 
 }
