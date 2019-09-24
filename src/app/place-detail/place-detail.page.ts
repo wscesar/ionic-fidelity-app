@@ -14,11 +14,15 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 })
 export class PlaceDetailPage implements OnInit {
 
-    paramPlace: string;
-    place: Place;
-    promotions: Promotion[];
-    lenght: number = 0;
-    arr: [];
+    private subscription: Subscription;
+    private paramPlace: string;
+    private place: Place;
+    private places: Place[];
+    private promotions: Promotion[];
+    private isLoadingPlaces: boolean;
+    private isLoadingPromotions: boolean;
+    private placeSubscription: Subscription;
+    private promotionSubscription: Subscription;
 
     constructor (
         private route: ActivatedRoute,
@@ -26,15 +30,35 @@ export class PlaceDetailPage implements OnInit {
         private promotionService: PromotionService
     ) { }
 
+    ionViewWillEnter() {
+        this.isLoadingPlaces = true;
+        this.placeService.fetchPlaces().subscribe(() => {
+            this.isLoadingPlaces = false;
+        });
+        
+        this.isLoadingPromotions = true;
+        this.promotionService.fetchData().subscribe(() => {
+            this.isLoadingPromotions = false;
+        });
+    }
+
     ngOnInit() {
 
         this.paramPlace = this.route.snapshot.paramMap.get("place");
-        
-        this.promotions = this.promotionService.promotions;
 
-        this.place = this.placeService.places.find(
-            place => place.title === this.paramPlace
-        );
+        this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
+            this.places = response;
+            this.place = response.find( place => {
+                if ( place.title === this.paramPlace ) {
+                    return place;
+                }
+            });
+        });
+
+        // this.promotions = this.promotionService.promotions;
+        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
+            this.promotions = response;
+        });
 
     }
 

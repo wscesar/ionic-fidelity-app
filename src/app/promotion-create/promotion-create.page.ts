@@ -6,6 +6,9 @@ import { LoadingController, AlertController, NavController } from '@ionic/angula
 
 import { PromotionService } from '../shared/promotion.service';
 import { Promotion } from '../shared/promotion.model';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-promotion-create',
@@ -16,10 +19,12 @@ export class PromotionCreatePage implements OnInit {
     promotionList: Promotion[];
     promotion: Promotion;
     paramPlace: string;
+    baseUrl ='https://my-dummy-database.firebaseio.com/promotions.json';
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private http: HttpClient,
         private promotionService: PromotionService,
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
@@ -56,6 +61,13 @@ export class PromotionCreatePage implements OnInit {
         );
         
         this.promotionService.promotions.push(newPromotion);
+        const promotions = this.promotionService.promotions;
+        
+        this.http
+                .put( this.baseUrl, promotions )
+                .subscribe(
+                    response => { console.log(response) }
+                );
 
         this.alertCtrl
         .create({
@@ -68,5 +80,7 @@ export class PromotionCreatePage implements OnInit {
         })
 
     }
+
+    
 
 }

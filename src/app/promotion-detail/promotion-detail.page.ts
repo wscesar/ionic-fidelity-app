@@ -15,16 +15,22 @@ import { Subscription } from 'rxjs';
 })
 export class PromotionDetailPage implements OnInit {
 
-    private subscription: Subscription;
+    private placeSubscription: Subscription;
+    private promotionSubscription: Subscription;
+    private isLoadingPlaces: boolean;
+    private isLoadingPromotions: boolean;
     title: string;
     image: string;
     productScore: number;
     userScore: number;
     paramPlace: string;
     paramPromotion: string;
+    
     placeList: Place[];
     promotionList: Promotion[];
     lenght: number = 0 ;
+
+    place: Place;
 
     disableButton = false;
 
@@ -35,58 +41,77 @@ export class PromotionDetailPage implements OnInit {
         private placeService: PlaceService,
         private promotionService: PromotionService,
     ) { }
+    
 
-    ionViewDidEnter(){
-        this.toggleButton();
+    ionViewWillEnter(){
+        
+        this.isLoadingPlaces = true;
+        this.placeService.fetchPlaces().subscribe(() => {
+            this.isLoadingPlaces = false;
+            this.getUserScore();
+            this.toggleButton();
+        });
+
+        this.isLoadingPromotions = true;
+        this.promotionService.fetchData().subscribe(() => {
+            this.isLoadingPromotions = false;
+            this.getPromotionData();
+            this.toggleButton();
+        });
     }
+
 
     ngOnInit() {
         this.paramPlace = this.route.snapshot.paramMap.get("place");
         this.paramPromotion = this.route.snapshot.paramMap.get("promotion");
-        this.promotionList = this.promotionService.promotions;
         
-        this.placeList = this.placeService.places;
-        // this.subscription = this.placeService.getPlaces.subscribe(places => {
-        //     this.placeList = places;
-        // });
+        // this.promotionList = this.promotionService.promotions;
+        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
+            this.promotionList = response;
+        });
         
-        this.getPlaceData();
-        this.getData();
+        // this.placeList = this.placeService.places;
+        this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
+            this.placeList = response;
+        });
+
     }
 
-     getPlaceData() {
 
-        let places = this.placeList;
-
-        for ( let i = 0 ; i < places.length ; i++ )  {
-            if ( places[i].title === this.paramPlace ) {
-                this.userScore = places[i].score;
-                return i;
+     getUserScore() {
+        for ( let i in this.placeList )  {
+            if ( this.placeList[i].title === this.paramPlace ) {
+                this.userScore = this.placeList[i].score;
             }
         }
-
     }
 
-  getData() {
-    let promo = this.promotionList;
 
-    for ( let i = 0 ; i < promo.length ; i++ )  {
-        if (
-            promo[i].title === this.paramPromotion &&
-            promo[i].store === this.paramPlace
-           ) {
-            this.title = promo[i].title;
-            this.image = promo[i].image;
-            this.productScore = promo[i].score;
+    getPromotionData() {
+
+        let promo = this.promotionList;
+
+        for ( let i in promo )  {
+            if (
+                promo[i].title === this.paramPromotion &&
+                promo[i].store === this.paramPlace
+            ) {
+                this.title = promo[i].title;
+                this.image = promo[i].image;
+                this.productScore = promo[i].score;
+            }
         }
     }
-  }
+
 
     toggleButton() {
         let places = this.placeList;
-        for ( let i = 0 ; i < places.length ; i++ ) {
+        
+        for ( let i in places ) {
             if ( places[i].title === this.paramPlace ) {
-                if (this.placeList[i].score < this.productScore){
+                console.log(places[i])
+                console.log(this.productScore)
+                if ( this.placeList[i].score < this.productScore ) {
                     this.disableButton = true;
                 }
             }
@@ -98,17 +123,22 @@ export class PromotionDetailPage implements OnInit {
         let pScore =  this.productScore
 
         if ( uScore >= pScore ) {
-            this.userScore = uScore - pScore;
+
+            this.userScore = uScore - pScore; //set new score
+
             let places = this.placeList;
-            
-            for ( let i = 0 ; i < places.length ; i++ )  {
+
+            for ( let i in places ) {
                 if ( places[i].title === this.paramPlace ) {
-                    this.placeList[i].score = this.userScore 
+                    this.placeList[i].score = this.userScore
+                    this.placeService.setPlaces(this.placeList);
+                    this.placeService.updatePlaces();
                 }
             }
 
-            if (this.userScore < this.productScore)
-                this.disableButton = true;
+            this.toggleButton();
+            // if ( this.userScore < this.productScore )
+            //     this.disableButton = true;
 
             this.alertCtrl
                 .create({
@@ -117,7 +147,7 @@ export class PromotionDetailPage implements OnInit {
                 })
                 .then(alertEl => {
                     alertEl.present();
-                    this.navCtrl.navigateBack('/');
+                    // this.navCtrl.navigateBack('/');
                 })
                 
         } else {

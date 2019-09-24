@@ -10,35 +10,50 @@ import { Promotion } from '../shared/promotion.model';
   templateUrl: './user-score.page.html'
 })
 export class UserScorePage implements OnInit {
-  private subscription: Subscription;
+    private places: Place[];
+    private promotions: Promotion[];
+    private isLoadingPlaces: boolean;
+    private isLoadingPromotions: boolean;
+    private placeSubscription: Subscription;
+    private promotionSubscription: Subscription;
 
-  places: Place[];
-  promotions: Promotion[];
 
-  constructor(
-    private placeService: PlaceService,
-    private promotionService: PromotionService
-  ) { }
+    constructor(
+        private placeService: PlaceService,
+        private promotionService: PromotionService
+    ) { }
 
-    // ionViewWillEnter() {
-    //     this.placeService.fetchPlaces().subscribe(() => {
-    //     });
-    // }
+
+    ionViewDidEnter() {
+        this.isLoadingPlaces = true;
+        this.placeService.fetchPlaces().subscribe(response => {
+            this.isLoadingPlaces = false;
+            console.log(response)
+        });
+        
+        this.isLoadingPromotions = true;
+        this.promotionService.fetchData().subscribe(() => {
+            this.isLoadingPromotions = false;
+        });
+    }
+
 
     ngOnInit() {
-        this.places = this. placeService.places;
-        // this.subscription =  this.placeService.getPlaces.subscribe(places => {
-        //     this.places = places;
-        // })
+        this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
+            this.places = response;
+        });
 
-        this.promotions = this.promotionService.promotions;
+        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
+            this.promotions = response;
+        });
     }
+    
 
     hasPromotion ( placeId: string ) {
         let promotions = this.promotions;
 
         for ( let key in promotions ) {
-            if (promotions[key].store === placeId) {
+            if ( promotions[key].store === placeId ) {
                 return true;
             }
         }

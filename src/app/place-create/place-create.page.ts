@@ -23,6 +23,12 @@ export class PlaceCreatePage implements OnInit {
                 updateOn: 'blur',
                 validators: [Validators.required]
             }),
+
+            image: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [Validators.required]
+            }),
+
             score: new FormControl(null, {
                 updateOn: 'blur',
                 validators: [Validators.required]
@@ -42,6 +48,7 @@ export class PlaceCreatePage implements OnInit {
             this.placesService.addPlace (
                 
                 this.form.value.place,
+                this.form.value.image,
                 +this.form.value.score
 
             ) .subscribe( () => {
