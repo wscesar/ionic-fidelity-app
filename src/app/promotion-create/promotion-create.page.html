@@ -1,24 +1,33 @@
 <ion-header>
     <ion-toolbar>
-      <ion-title>Criar Promoção</ion-title>
+      <ion-title>{{paramPlace}} - Criar Promoção</ion-title>
     </ion-toolbar>
   </ion-header>
   
-  <ion-content padding>
-    <form [formGroup]="form" (submit)="onFormSubmit()">
+    <ion-content padding>
+        <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+                <form [formGroup]="form" (submit)="onFormSubmit()">
+                
+                    <ion-item class="ion-margin-bottom ion-no-padding">
+                        <ion-label position="floating">Promoção</ion-label>
+                        <ion-input formControlName="promotion"></ion-input>
+                    </ion-item>
+        
+                    <ion-item class="ion-margin-bottom ion-no-padding">
+                        <ion-label position="floating">Imagem</ion-label>
+                        <ion-input formControlName="image"></ion-input>
+                    </ion-item>
+                
+                    <ion-item class="ion-margin-bottom ion-no-padding">
+                        <ion-label position="floating">Pontos</ion-label>
+                        <ion-input formControlName="score"></ion-input>
+                    </ion-item>
+                
+                    <ion-button type="submit" expand="block">Salvar</ion-button>
+            
+                </form>
+            </ion-col>
+        </ion-row> 
+    </ion-content>
     
-      <ion-item>
-        <ion-label position="floating">Promoção</ion-label>
-        <ion-input formControlName="promotion"></ion-input>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label position="floating">Pontos</ion-label>
-        <ion-input formControlName="score"></ion-input>
-      </ion-item>
-  
-      <ion-button type="submit" expand="block">Salvar</ion-button>
-  
-    </form>
-</ion-content>
-  

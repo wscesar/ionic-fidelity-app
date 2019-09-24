@@ -6,6 +6,7 @@ const routes: Routes = [
     { path: 'meus-pontos', loadChildren: './user-score/user-score.module#UserScorePageModule' },
 
     { path: 'criar-loja', loadChildren: './place-create/place-create.module#PlaceCreatePageModule' },
+    { path: 'criar-promocao', loadChildren: './promotion-create/promotion-create.module#PromotionCreatePageModule' },
 
     {
         path: 'promocoes',

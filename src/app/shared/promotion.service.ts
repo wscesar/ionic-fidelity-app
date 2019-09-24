@@ -25,7 +25,7 @@ export class PromotionService {
         return this._promotions.asObservable();
     }
 
-    promotions: Promotion[];
+    private promotions: Promotion[];
     // promotions: Promotion[] = [
         
     //     new Promotion(
@@ -58,6 +58,22 @@ export class PromotionService {
     // ]
     
     constructor(private http: HttpClient) {}
+
+
+    setPromotions(promotions: Promotion[]) {
+        this.promotions = promotions;
+    }
+
+    updatePromotions() {
+        this.http
+                .put( 
+                    this.baseUrl,
+                    this.promotions
+                )
+                .subscribe(
+                    response => { console.log(response) }
+                );
+    }
 
     fetchData() {
         return this.http

@@ -8,6 +8,7 @@ import { PromotionService } from '../shared/promotion.service';
 import { Promotion } from '../shared/promotion.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,11 +16,12 @@ import { map } from 'rxjs/operators';
   templateUrl: './promotion-create.page.html',
 })
 export class PromotionCreatePage implements OnInit {
+    baseUrl = 'https://my-dummy-database.firebaseio.com/promotions.json';
     form: FormGroup;
-    promotionList: Promotion[];
+    promotions: Promotion[];
     promotion: Promotion;
     paramPlace: string;
-    baseUrl ='https://my-dummy-database.firebaseio.com/promotions.json';
+    subscription: Subscription;
 
     constructor(
         private router: Router,
@@ -31,14 +33,29 @@ export class PromotionCreatePage implements OnInit {
         private alertCtrl: AlertController
     ) {}
 
+    ionViewWillEnter() {
+        this.promotionService.fetchData().subscribe(() => {
+            console.log(this.promotions)
+        });
+    }
+
     ngOnInit() {
         this.paramPlace =  this.route.snapshot.paramMap.get('place');
 
-        this.promotionList = this.promotionService.promotions; 
+        // this.promotions = this.promotionService.promotions; 
+        this.subscription = this.promotionService.getPromotions.subscribe(response => {
+            this.promotions = response;
+        });
+
 
         this.form = new FormGroup({
             
             promotion: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [Validators.required]
+            }),
+
+            image: new FormControl(null, {
                 updateOn: 'blur',
                 validators: [Validators.required]
             }),
@@ -51,33 +68,30 @@ export class PromotionCreatePage implements OnInit {
         });
     }
 
+    
     onFormSubmit() {
 
         const newPromotion = new Promotion (
             this.paramPlace,
             this.form.value.promotion,
-            this.form.value.score,
-            'https://static.thenounproject.com/png/1174579-200.png'
+            +this.form.value.score,
+            this.form.value.image,
         );
         
-        this.promotionService.promotions.push(newPromotion);
-        const promotions = this.promotionService.promotions;
-        
-        this.http
-                .put( this.baseUrl, promotions )
-                .subscribe(
-                    response => { console.log(response) }
-                );
+        this.promotions.push(newPromotion);
+        this.promotionService.setPromotions(this.promotions);
+        this.promotionService.updatePromotions();
 
         this.alertCtrl
-        .create({
-            header: 'Ok',
-            message: 'Promocao cadastrada com sucesso'
-        })
-        .then(alertEl => {
-            alertEl.present();
-            this.navCtrl.navigateBack(`/promocoes/${this.paramPlace}`);
-        })
+            .create({
+                header: 'Ok',
+                message: 'Promocao cadastrada com sucesso'
+            })
+            .then(alertEl => {
+                alertEl.present();
+                this.navCtrl.navigateBack('/');
+                // this.navCtrl.navigateBack(`/promocoes/${this.paramPlace}`);
+            })
 
     }
 
