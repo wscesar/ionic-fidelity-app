@@ -1,5 +1,6 @@
 <ion-header>
         <ion-toolbar>
+            
             <ion-buttons slot="start">
                 <ion-back-button defaultHref="/"></ion-back-button>
             </ion-buttons>
@@ -29,22 +30,22 @@
                 <h2>Promoções Disponíveis</h2>
             </ion-label>
 
-            <ion-list>
+            <ion-list >
 
-                <div *ngFor="let promotion of promotions">
+                <div *ngFor="let product of products">
         
                     <ion-item
                         detail
-                        *ngIf="promotion.store === paramPlace"
-                        [routerLink]="['/', 'promocoes', promotion.store, promotion.title]" >
+                        *ngIf="product.store === paramPlace"
+                        [routerLink]="['/', 'promocoes', product.store, product.title]" >
         
                         <ion-thumbnail>
-                            <ion-img [src]="promotion.image"></ion-img>
+                            <ion-img [src]="product.image"></ion-img>
                         </ion-thumbnail>
             
                         <ion-label>
-                            <h2>{{ promotion.title }}</h2>
-                            <p>Pontos: {{ promotion.score }}</p>
+                            <h2>{{ product.title }}</h2>
+                            <p>Pontos: {{ product.score }}</p>
                         </ion-label>
         
                     </ion-item>

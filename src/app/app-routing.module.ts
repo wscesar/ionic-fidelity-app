@@ -6,8 +6,9 @@ const routes: Routes = [
     { path: 'meus-pontos', loadChildren: './user-score/user-score.module#UserScorePageModule' },
 
     { path: 'criar-loja', loadChildren: './place-create/place-create.module#PlaceCreatePageModule' },
-    { path: 'criar-promocao', loadChildren: './promotion-create/promotion-create.module#PromotionCreatePageModule' },
+    { path: 'criar-promocao', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
 
+    { path: 'produtos', loadChildren: './product-list/product-list.module#ProductListPageModule' },
     {
         path: 'promocoes',
         children: [
@@ -16,11 +17,11 @@ const routes: Routes = [
                 children: [
                     {
                         path: 'criar-promocao', 
-                        loadChildren: './promotion-create/promotion-create.module#PromotionCreatePageModule'
+                        loadChildren: './product-create/product-create.module#ProductCreatePageModule'
                     },
                     {
-                        path: ':promotion', 
-                        loadChildren: './promotion-detail/promotion-detail.module#PromotionDetailPageModule'
+                        path: ':product', 
+                        loadChildren: './product-detail/product-detail.module#ProductDetailPageModule'
                     },
                     {
                         path: '',
@@ -30,12 +31,12 @@ const routes: Routes = [
             },
             {
                 path: '',
-                loadChildren: './promotion-list/promotion-list.module#PromotionListPageModule'
+                loadChildren: './product-list/product-list.module#ProductListPageModule'
             },
         ]
         
     },
-  { path: 'promotion-create', loadChildren: './promotion-create/promotion-create.module#PromotionCreatePageModule' },
+  { path: 'product-create', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
 
 ];
 

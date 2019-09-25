@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Place } from '../shared/place.model';
-import { Promotion } from '../shared/promotion.model';
+import { Product } from '../shared/product.model';
 import { PlaceService } from '../shared/place.service';
-import { PromotionService } from '../shared/promotion.service';
+import { ProductService } from '../shared/product.service';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -18,16 +18,16 @@ export class PlaceDetailPage implements OnInit {
     private paramPlace: string;
     private place: Place;
     private places: Place[];
-    private promotions: Promotion[];
+    private products: Product[];
     private isLoadingPlaces: boolean;
-    private isLoadingPromotions: boolean;
+    private isLoadingProducts: boolean;
     private placeSubscription: Subscription;
-    private promotionSubscription: Subscription;
+    private productSubscription: Subscription;
 
     constructor (
         private route: ActivatedRoute,
         private placeService: PlaceService,
-        private promotionService: PromotionService
+        private productService: ProductService
     ) { }
 
     ionViewWillEnter() {
@@ -36,9 +36,9 @@ export class PlaceDetailPage implements OnInit {
             this.isLoadingPlaces = false;
         });
         
-        this.isLoadingPromotions = true;
-        this.promotionService.fetchData().subscribe(() => {
-            this.isLoadingPromotions = false;
+        this.isLoadingProducts = true;
+        this.productService.fetchData().subscribe(() => {
+            this.isLoadingProducts = false;
         });
     }
 
@@ -67,9 +67,9 @@ export class PlaceDetailPage implements OnInit {
 
 
 
-        // this.promotions = this.promotionService.promotions;
-        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
-            this.promotions = response;
+        // this.products = this.productService.products;
+        this.productSubscription = this.productService.getProducts.subscribe(response => {
+            this.products = response;
         });
 
     }

@@ -25,25 +25,25 @@
     </div>
 
     <div *ngIf="!isLoading">
-        <ion-row *ngFor="let promotion of promotions">
+        <ion-row *ngFor="let product of products">
     
             <ion-col size-md="6" offset-sm="3" class="ion-text-center">
               
-                <ion-item detail [routerLink]="['/', 'promocoes', promotion.store, promotion.title]">
+                <ion-item detail [routerLink]="['/', 'promocoes', product.store, product.title]">
     
                     <ion-label>
                         <ion-avatar>
-                            <ion-img [src]="promotion.image"></ion-img>
+                            <ion-img [src]="product.image"></ion-img>
                         </ion-avatar>
                     </ion-label>
     
                     <ion-label>
-                        <h2>{{ promotion.title }}</h2>
-                        <p>{{ promotion.store }}</p>
+                        <h2>{{ product.title }}</h2>
+                        <p>{{ product.store }}</p>
                     </ion-label>
                     
                     <ion-label>
-                        <p>Pontos: {{ promotion.score }}</p>
+                        <p>Pontos: {{ product.score }}</p>
                     </ion-label>
     
                 </ion-item>

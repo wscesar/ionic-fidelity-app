@@ -1,4 +1,4 @@
-export class Promotion {
+export class Product {
     constructor(
         public store: string,
         public title: string,

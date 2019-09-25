@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
-import { Promotion } from './promotion.model';
+import { Product } from './product.model';
 
 interface DataModel {
     store: string,
@@ -16,40 +16,40 @@ interface DataModel {
 @Injectable({
     providedIn: 'root'
 })
-export class PromotionService {
+export class ProductService {
     
     private baseUrl = 'https://my-dummy-database.firebaseio.com/promotions.json';
-    private _promotions = new BehaviorSubject<Promotion[]>([]);
+    private _products = new BehaviorSubject<Product[]>([]);
     
-    get getPromotions() {
-        return this._promotions.asObservable();
+    get getProducts() {
+        return this._products.asObservable();
     }
 
-    private promotions: Promotion[];
-    // promotions: Promotion[] = [
+    private products: Product[];
+    // products: Product[] = [
         
-    //     new Promotion(
+    //     new Product(
     //         'Rocket',
     //         'Chopp',
     //         50,
     //         'http://tribunadacerveja.com.br/wp-content/uploads/2016/12/Chopp-Weiss-3.jpg'
     //     ),
 
-    //     new Promotion(
+    //     new Product(
     //         'Rocket',
     //         'Batata Frita',
     //         50,
     //         'https://comidinhasdochef.com/wp-content/uploads/2018/06/Batata-Frita-de-Lanchonete.jpg'
     //     ),
         
-    //     new Promotion(
+    //     new Product(
     //         'Brunholi',
     //         'Vinho',
     //         30,
     //         'http://www.territoriodovinho.com.br/files/01.jpg'
     //     ),
 
-    //     new Promotion(
+    //     new Product(
     //         'Tchilis',
     //         'Taco',
     //         15,
@@ -60,15 +60,15 @@ export class PromotionService {
     constructor(private http: HttpClient) {}
 
 
-    setPromotions(promotions: Promotion[]) {
-        this.promotions = promotions;
+    setProducts(products: Product[]) {
+        this.products = products;
     }
 
-    updatePromotions() {
+    updateProducts() {
         this.http
                 .put( 
                     this.baseUrl,
-                    this.promotions
+                    this.products
                 )
                 .subscribe(
                     response => { console.log(response) }
@@ -84,12 +84,12 @@ export class PromotionService {
 
             map( response => {
 
-                const promotions = [];
+                const products = [];
                 
                 for ( const key in response ) {
                     if ( response.hasOwnProperty(key) ) {
-                        promotions.push (
-                            new Promotion (
+                        products.push (
+                            new Product (
                                 // key,
                                 response[key].store,
                                 response[key].title,
@@ -100,11 +100,11 @@ export class PromotionService {
                     }
                 }
 
-                return promotions;
+                return products;
             }),
             
             tap( response => {
-                this._promotions.next(response)
+                this._products.next(response)
             })
 
         )

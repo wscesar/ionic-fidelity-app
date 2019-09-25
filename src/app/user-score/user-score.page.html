@@ -27,7 +27,7 @@
         <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
             <ion-virtual-scroll [items]="places" approxItemHeight="70px">
                 <div *virtualItem="let place">
-                    <ion-item>
+                    <ion-item detail [routerLink]="['/', 'promocoes', place.title]">
               
                         <ion-thumbnail slot="start" color="dark">
                             <ion-img [src]="place.image"></ion-img>
@@ -38,10 +38,6 @@
                             <p>Meus pontos: {{ place.score }}</p>
                         </ion-label>
 
-                        <ion-button
-                            [disabled]="!hasPromotion(place.title)"
-                            [routerLink]="['/', 'promocoes', place.title]">Promoções</ion-button>
-  
                     </ion-item>
                 </div>
             </ion-virtual-scroll>

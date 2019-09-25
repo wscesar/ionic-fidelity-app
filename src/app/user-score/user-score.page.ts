@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Place } from '../shared/place.model';
 import { PlaceService } from '../shared/place.service';
-import { PromotionService } from '../shared/promotion.service';
-import { Promotion } from '../shared/promotion.model';
+import { ProductService } from '../shared/product.service';
+import { Product } from '../shared/product.model';
 
 @Component({
   selector: 'app-user-score',
@@ -11,16 +11,16 @@ import { Promotion } from '../shared/promotion.model';
 })
 export class UserScorePage implements OnInit {
     private places: Place[];
-    private promotions: Promotion[];
+    private products: Product[];
     private isLoadingPlaces: boolean;
-    private isLoadingPromotions: boolean;
+    private isLoadingProducts: boolean;
     private placeSubscription: Subscription;
-    private promotionSubscription: Subscription;
+    private productSubscription: Subscription;
 
 
     constructor(
         private placeService: PlaceService,
-        private promotionService: PromotionService
+        private productService: ProductService
     ) { }
 
 
@@ -28,12 +28,11 @@ export class UserScorePage implements OnInit {
         this.isLoadingPlaces = true;
         this.placeService.fetchPlaces().subscribe(response => {
             this.isLoadingPlaces = false;
-            console.log(response)
         });
         
-        this.isLoadingPromotions = true;
-        this.promotionService.fetchData().subscribe(() => {
-            this.isLoadingPromotions = false;
+        this.isLoadingProducts = true;
+        this.productService.fetchData().subscribe(() => {
+            this.isLoadingProducts = false;
         });
     }
 
@@ -43,17 +42,17 @@ export class UserScorePage implements OnInit {
             this.places = response;
         });
 
-        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
-            this.promotions = response;
+        this.productSubscription = this.productService.getProducts.subscribe(response => {
+            this.products = response;
         });
     }
     
 
-    hasPromotion ( placeId: string ) {
-        let promotions = this.promotions;
+    hasProduct ( placeId: string ) {
+        let products = this.products;
 
-        for ( let key in promotions ) {
-            if ( promotions[key].store === placeId ) {
+        for ( let key in products ) {
+            if ( products[key].store === placeId ) {
                 return true;
             }
         }

@@ -4,22 +4,22 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { LoadingController, AlertController, NavController } from '@ionic/angular';
 
-import { PromotionService } from '../shared/promotion.service';
-import { Promotion } from '../shared/promotion.model';
+import { ProductService } from '../shared/product.service';
+import { Product } from '../shared/product.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 
 @Component({
-  selector: 'app-promotion-create',
-  templateUrl: './promotion-create.page.html',
+  selector: 'app-product-create',
+  templateUrl: './product-create.page.html',
 })
-export class PromotionCreatePage implements OnInit {
-    baseUrl = 'https://my-dummy-database.firebaseio.com/promotions.json';
+export class ProductCreatePage implements OnInit {
+    baseUrl = 'https://my-dummy-database.firebaseio.com/products.json';
     form: FormGroup;
-    promotions: Promotion[];
-    promotion: Promotion;
+    products: Product[];
+    product: Product;
     paramPlace: string;
     subscription: Subscription;
 
@@ -27,30 +27,30 @@ export class PromotionCreatePage implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private http: HttpClient,
-        private promotionService: PromotionService,
+        private productService: ProductService,
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
         private alertCtrl: AlertController
     ) {}
 
     ionViewWillEnter() {
-        this.promotionService.fetchData().subscribe(() => {
-            console.log(this.promotions)
+        this.productService.fetchData().subscribe(() => {
+            console.log(this.products)
         });
     }
 
     ngOnInit() {
         this.paramPlace =  this.route.snapshot.paramMap.get('place');
 
-        // this.promotions = this.promotionService.promotions; 
-        this.subscription = this.promotionService.getPromotions.subscribe(response => {
-            this.promotions = response;
+        // this.products = this.productService.products; 
+        this.subscription = this.productService.getProducts.subscribe(response => {
+            this.products = response;
         });
 
 
         this.form = new FormGroup({
             
-            promotion: new FormControl(null, {
+            product: new FormControl(null, {
                 updateOn: 'blur',
                 validators: [Validators.required]
             }),
@@ -71,16 +71,16 @@ export class PromotionCreatePage implements OnInit {
     
     onFormSubmit() {
 
-        const newPromotion = new Promotion (
+        const nroduct = new Product (
             this.paramPlace,
-            this.form.value.promotion,
+            this.form.value.product,
             +this.form.value.score,
             this.form.value.image,
         );
         
-        this.promotions.push(newPromotion);
-        this.promotionService.setPromotions(this.promotions);
-        this.promotionService.updatePromotions();
+        this.products.push(nroduct);
+        this.productService.setProducts(this.products);
+        this.productService.updateProducts();
 
         this.alertCtrl
             .create({

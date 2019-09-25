@@ -2,32 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Place } from '../shared/place.model';
-import { Promotion } from '../shared/promotion.model';
+import { Product } from '../shared/product.model';
 import { PlaceService } from '../shared/place.service';
-import { PromotionService } from '../shared/promotion.service';
+import { ProductService } from '../shared/product.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-promotion-detail',
-  templateUrl: './promotion-detail.page.html',
-  styleUrls: ['./promotion-detail.page.sass'],
+  selector: 'app-product-detail',
+  templateUrl: './product-detail.page.html',
+  styleUrls: ['./product-detail.page.sass'],
 })
-export class PromotionDetailPage implements OnInit {
+export class ProductDetailPage implements OnInit {
 
     private placeSubscription: Subscription;
-    private promotionSubscription: Subscription;
+    private productSubscription: Subscription;
     private isLoadingPlaces: boolean;
-    private isLoadingPromotions: boolean;
+    private isLoadingProducts: boolean;
     title: string;
     image: string;
     productScore: number;
     userScore: number;
     paramPlace: string;
-    paramPromotion: string;
+    paramProduct: string;
     
     placeList: Place[];
-    promotionList: Promotion[];
+    productList: Product[];
     lenght: number = 0 ;
 
     place: Place;
@@ -39,7 +39,7 @@ export class PromotionDetailPage implements OnInit {
         private navCtrl: NavController,
         private alertCtrl: AlertController,
         private placeService: PlaceService,
-        private promotionService: PromotionService,
+        private productService: ProductService,
     ) { }
     
 
@@ -52,10 +52,10 @@ export class PromotionDetailPage implements OnInit {
             this.toggleButton();
         });
 
-        this.isLoadingPromotions = true;
-        this.promotionService.fetchData().subscribe(() => {
-            this.isLoadingPromotions = false;
-            this.getPromotionData();
+        this.isLoadingProducts = true;
+        this.productService.fetchData().subscribe(() => {
+            this.isLoadingProducts = false;
+            this.getProductData();
             this.toggleButton();
         });
     }
@@ -63,11 +63,11 @@ export class PromotionDetailPage implements OnInit {
 
     ngOnInit() {
         this.paramPlace = this.route.snapshot.paramMap.get("place");
-        this.paramPromotion = this.route.snapshot.paramMap.get("promotion");
+        this.paramProduct = this.route.snapshot.paramMap.get("product");
         
-        // this.promotionList = this.promotionService.promotions;
-        this.promotionSubscription = this.promotionService.getPromotions.subscribe(response => {
-            this.promotionList = response;
+        // this.productList = this.productService.products;
+        this.productSubscription = this.productService.getProducts.subscribe(response => {
+            this.productList = response;
         });
         
         // this.placeList = this.placeService.places;
@@ -87,13 +87,13 @@ export class PromotionDetailPage implements OnInit {
     }
 
 
-    getPromotionData() {
+    getProductData() {
 
-        let promo = this.promotionList;
+        let promo = this.productList;
 
         for ( let i in promo )  {
             if (
-                promo[i].title === this.paramPromotion &&
+                promo[i].title === this.paramProduct &&
                 promo[i].store === this.paramPlace
             ) {
                 this.title = promo[i].title;
