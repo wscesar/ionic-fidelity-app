@@ -23,6 +23,7 @@ export class PlaceDetailPage implements OnInit {
     private isLoadingProducts: boolean;
     private placeSubscription: Subscription;
     private productSubscription: Subscription;
+    private productLength: number;
 
     constructor (
         private route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class PlaceDetailPage implements OnInit {
     ) { }
 
     ionViewWillEnter() {
+
         this.isLoadingPlaces = true;
         this.placeService.fetchPlaces().subscribe(() => {
             this.isLoadingPlaces = false;
@@ -40,24 +42,37 @@ export class PlaceDetailPage implements OnInit {
         this.productService.fetchData().subscribe(() => {
             this.isLoadingProducts = false;
         });
+        
     }
 
     ngOnInit() {
 
         this.paramPlace = this.route.snapshot.paramMap.get("place");
 
-        this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
-            this.places = response;
-            response.find( place => {
+        this.placeSubscription = this.placeService.getPlaces.subscribe(places => {
+
+            this.places = places;
+
+            this.places.find( place => {
                 if ( place.title === this.paramPlace ) {
                     this.place = place;
                     return false;
                 }
             });
+
         });
 
-        this.productSubscription = this.productService.getProducts.subscribe(response => {
-            this.products = response;
+        this.productSubscription = this.productService.getProducts.subscribe(products => {
+            
+            this.productLength = 0;
+            this.products = products;
+
+            for ( let i = 0 ; i < this.products.length ; i++ ) {
+                if ( this.products[i].store === this.paramPlace ) {
+                    this.productLength++;
+                }
+            }
+
         });
 
     }

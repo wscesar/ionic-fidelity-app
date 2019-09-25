@@ -26,12 +26,12 @@
         
             <ion-img [src]="place.image"></ion-img>
 
-            <ion-label text-center>
-                <h2 *ngIf="products.length > 0">Produtos Disponíveis</h2>
-                <h2 *ngIf="products.length == 0">Não há produtos cadastrados</h2>
+            <ion-label class="ion-text-center">
+                <h2 *ngIf="productLength > 0">Produtos Disponíveis</h2>
+                <h2 *ngIf="productLength == 0">Não há produtos cadastrados</h2>
             </ion-label>
 
-            <ion-list *ngIf="products.length > 0">
+            <ion-list *ngIf="productLength > 0">
 
                 <div *ngFor="let product of products">
         
