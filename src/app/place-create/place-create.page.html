@@ -21,20 +21,35 @@
 <ion-content padding>
   <form [formGroup]="form" (submit)="onInsertData()">
     
-    <ion-item>
-      <ion-label position="floating">Loja</ion-label>
-      <ion-input formControlName="place"></ion-input>
+    <ion-item class="ion-margin-bottom">
+        <ion-label position="floating">Restaurante</ion-label>
+        <ion-input formControlName="place"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Pontos</ion-label>
-      <ion-input formControlName="score"></ion-input>
+    <!-- <ion-item class="ion-margin-bottom">
+        <ion-label position="floating">Endereço</ion-label>
+        <ion-input formControlName="address"></ion-input>
+    </ion-item> -->
+
+    <ion-item class="ion-margin-bottom">
+        <ion-label position="floating">Horário de abertura</ion-label>
+        <ion-datetime formControlName="openingTime" displayFormat="HH:mm" minuteValues="0,15,30,45"></ion-datetime>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="ion-margin-bottom">
+        <ion-label position="floating">Horário de fechamento</ion-label>
+        <ion-datetime formControlName="closingTime" displayFormat="HH:mm" minuteValues="0,15,30,45"></ion-datetime>
+    </ion-item>
+
+    <ion-item class="ion-margin-bottom">
+        <ion-label position="floating">Pontos</ion-label>
+        <ion-input formControlName="score"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-margin-bottom">
         <ion-label position="floating">URL Imagem</ion-label>
         <ion-input formControlName="image"></ion-input>
-      </ion-item>
+    </ion-item>
 
     <ion-button type="submit"  expand="block">Salvar</ion-button>
 

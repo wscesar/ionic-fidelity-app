@@ -42,32 +42,20 @@ export class PlaceDetailPage implements OnInit {
         });
     }
 
-    foo() {
-        this.places.find( place => {
-            if ( place.title === this.paramPlace ) {
-                this.place = place;
-                return false;
-            }
-        });
-    }
-
     ngOnInit() {
 
         this.paramPlace = this.route.snapshot.paramMap.get("place");
 
         this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
             this.places = response;
-            this.foo()
-            // response.find( place => {
-            //     if ( place.title === this.paramPlace ) {
-            //         this.place = place;
-            //     }
-            // });
+            response.find( place => {
+                if ( place.title === this.paramPlace ) {
+                    this.place = place;
+                    return false;
+                }
+            });
         });
 
-
-
-        // this.products = this.productService.products;
         this.productSubscription = this.productService.getProducts.subscribe(response => {
             this.products = response;
         });

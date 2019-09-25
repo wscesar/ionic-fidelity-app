@@ -27,38 +27,12 @@ export class PlaceService {
     }
     
     private places: Place[];
-    // places: Place[] = [
-    //     new Place(
-    //         '1',
-    //         'Yellow',
-    //         'https://pbs.twimg.com/profile_images/471051324214501376/NEQcE5pB.jpeg',
-    //         80
-    //     ),
-    //     new Place(
-    //         '2',
-    //         'Rocket',
-    //         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMuHkr3Oh4CxWWEacZZ6xREC2ACqtMjMgpxQqxIW1SOYI31eMjsw',
-    //         50
-    //     ),
-    //     new Place(
-    //         '3',
-    //         'Brunholi',
-    //         'https://static.thenounproject.com/png/340719-200.png',
-    //         30
-    //     ),
-    //     new Place(
-    //         '4',
-    //         'Tchilis',
-    //         'http://tchilis.com.br/wp-content/uploads/2017/02/logo.png',
-    //         30
-    //     )
-    // ]
 
     constructor(private http: HttpClient, private navCtrl: NavController) {}
 
     fetchPlaces() {
         return this.http
-        .get<{ [key: string]: DataModel }> (
+        .get<{ [key: string]: Place }> (
             this.baseUrl
         )
         .pipe(
@@ -73,6 +47,8 @@ export class PlaceService {
                                 key,
                                 response[key].title,
                                 response[key].image,
+                                response[key].openingTime,
+                                response[key].closingTime,
                                 response[key].score
                             )
                         )
@@ -106,13 +82,17 @@ export class PlaceService {
     }
 
     
-    addPlace( title: string, image: string, score: number) {
+    addPlace( title: string, image: string,
+                openingTime: string, closingTime: string, score: number) {
+        
         let firebaseId: string;
 
         const newPlace = new Place (
             null,
             title,
             image,
+            openingTime,
+            closingTime,
             score
         );
 

@@ -29,6 +29,16 @@ export class PlaceCreatePage implements OnInit {
                 validators: [Validators.required]
             }),
 
+            openingTime: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [Validators.required]
+            }),
+
+            closingTime: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [Validators.required]
+            }),
+
             score: new FormControl(null, {
                 updateOn: 'blur',
                 validators: [Validators.required]
@@ -49,6 +59,8 @@ export class PlaceCreatePage implements OnInit {
                 
                 this.form.value.place,
                 this.form.value.image,
+                this.form.value.openingTime,
+                this.form.value.closingTime,
                 +this.form.value.score
 
             ) .subscribe( () => {

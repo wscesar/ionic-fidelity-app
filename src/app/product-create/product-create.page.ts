@@ -42,7 +42,6 @@ export class ProductCreatePage implements OnInit {
     ngOnInit() {
         this.paramPlace =  this.route.snapshot.paramMap.get('place');
 
-        // this.products = this.productService.products; 
         this.subscription = this.productService.getProducts.subscribe(response => {
             this.products = response;
         });
@@ -90,7 +89,6 @@ export class ProductCreatePage implements OnInit {
             .then(alertEl => {
                 alertEl.present();
                 this.navCtrl.navigateBack('/');
-                // this.navCtrl.navigateBack(`/promocoes/${this.paramPlace}`);
             })
 
     }

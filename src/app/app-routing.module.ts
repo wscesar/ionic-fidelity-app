@@ -5,7 +5,7 @@ const routes: Routes = [
     { path: '', redirectTo: 'meus-pontos', pathMatch: 'full' },
     { path: 'meus-pontos', loadChildren: './user-score/user-score.module#UserScorePageModule' },
 
-    { path: 'criar-loja', loadChildren: './place-create/place-create.module#PlaceCreatePageModule' },
+    { path: 'cadastrar-restaurante', loadChildren: './place-create/place-create.module#PlaceCreatePageModule' },
     { path: 'criar-promocao', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
 
     { path: 'produtos', loadChildren: './product-list/product-list.module#ProductListPageModule' },
@@ -16,7 +16,7 @@ const routes: Routes = [
                 path: ':place',
                 children: [
                     {
-                        path: 'criar-promocao', 
+                        path: 'criar', 
                         loadChildren: './product-create/product-create.module#ProductCreatePageModule'
                     },
                     {
@@ -34,9 +34,37 @@ const routes: Routes = [
                 loadChildren: './product-list/product-list.module#ProductListPageModule'
             },
         ]
-        
     },
-  { path: 'product-create', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
+
+    {
+        path: 'restaurante',
+        children: [
+            {
+                path: ':place',
+                children: [
+                    {
+                        path: 'criar', 
+                        loadChildren: './product-create/product-create.module#ProductCreatePageModule'
+                    },
+                    {
+                        path: ':product', 
+                        loadChildren: './product-detail/product-detail.module#ProductDetailPageModule'
+                    },
+                    {
+                        path: '',
+                        loadChildren: './place-detail/place-detail.module#PlaceDetailPageModule'
+                    },
+                ]
+            },
+            {
+                path: '',
+                loadChildren: './product-list/product-list.module#ProductListPageModule'
+            },
+        ]
+    },
+  
+    { path: 'product-create', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
+  
 
 ];
 

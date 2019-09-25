@@ -18,6 +18,13 @@
                         <ion-label>Restaurantes</ion-label>
                     </ion-item>
                 </ion-menu-toggle>
+
+                <ion-menu-toggle>
+                    <ion-item lines="none" routerLink="/cadastrar-restaurante">
+                        <ion-icon name="add" slot="start"></ion-icon>
+                        <ion-label>Cadastrar Restaurante</ion-label>
+                    </ion-item>
+                </ion-menu-toggle>
     
                 <ion-menu-toggle>
                     <ion-item lines="none" routerLink="/promocoes">
@@ -34,7 +41,7 @@
     <ion-router-outlet main></ion-router-outlet>
 
     <ion-tabs slot="bottom">
-        <ion-tab-bar color="primary">
+        <ion-tab-bar>
         
         <ion-tab-button tab="meus-pontos">
             <ion-label>Pontos</ion-label>
