@@ -1,26 +1,52 @@
 <ion-app>
     <!-- <ion-button routerLink="/criar-loja">Criar loja</ion-button> -->
 
-   <!--
-     <app-side-menu></app-side-menu>
-    -->
+    <ion-menu side="start">
+    
+        <ion-header>
+            <ion-toolbar>
+                <ion-title>MyApp</ion-title>
+            </ion-toolbar>
+        </ion-header>
+    
+        <ion-content>
+            <ion-list>
+            
+                <ion-menu-toggle>
+                    <ion-item lines="none" routerLink="/meus-pontos">
+                        <ion-icon name="star" slot="start"></ion-icon>
+                        <ion-label>Restaurantes</ion-label>
+                    </ion-item>
+                </ion-menu-toggle>
+    
+                <ion-menu-toggle>
+                    <ion-item lines="none" routerLink="/promocoes">
+                        <ion-icon name="bookmark" slot="start"></ion-icon>
+                        <ion-label>Promoções</ion-label>
+                    </ion-item>
+                </ion-menu-toggle>
+        
+          </ion-list>
+        </ion-content>
+    
+    </ion-menu>
 
-  <ion-router-outlet main></ion-router-outlet>
+    <ion-router-outlet main></ion-router-outlet>
 
-  <ion-tabs slot="bottom">
-    <ion-tab-bar color="primary">
-      
-      <ion-tab-button tab="meus-pontos">
-        <ion-label>Pontos</ion-label>
-        <ion-icon name="star"></ion-icon>
-      </ion-tab-button>
+    <ion-tabs slot="bottom">
+        <ion-tab-bar color="primary">
+        
+        <ion-tab-button tab="meus-pontos">
+            <ion-label>Pontos</ion-label>
+            <ion-icon name="star"></ion-icon>
+        </ion-tab-button>
 
-      <ion-tab-button tab="promocoes">
-        <ion-label>Promoções</ion-label>
-        <ion-icon name="bookmark"></ion-icon>
-      </ion-tab-button>
-      
-    </ion-tab-bar>
-  </ion-tabs>
+        <ion-tab-button tab="promocoes">
+            <ion-label>Promoções</ion-label>
+            <ion-icon name="bookmark"></ion-icon>
+        </ion-tab-button>
+        
+        </ion-tab-bar>
+    </ion-tabs>
 
 </ion-app>

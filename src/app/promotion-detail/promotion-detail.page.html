@@ -2,10 +2,18 @@
     <ion-toolbar>
         
         <ion-buttons slot="start">
-            <ion-back-button></ion-back-button>
+            <ion-back-button defaultHref="/"></ion-back-button>
         </ion-buttons>
 
         <ion-title>{{title}}</ion-title>
+
+        <ion-buttons slot="end">
+            <ion-menu-toggle>
+                <ion-button>
+                    <ion-icon name="menu"></ion-icon>
+                </ion-button>
+            </ion-menu-toggle>
+        </ion-buttons>
         
     </ion-toolbar>
 </ion-header>

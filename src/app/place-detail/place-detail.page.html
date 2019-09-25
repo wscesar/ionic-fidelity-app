@@ -1,24 +1,24 @@
 <ion-header>
-    <ion-toolbar>
-        
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="/" routerDirection="backward"></ion-back-button>
-        </ion-buttons>
-        
-        <ion-title>{{paramPlace}}</ion-title>
-
-        <ion-buttons slot="end" routerLink="./criar-promocao">
-            <ion-button>
-                <ion-icon name="add"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-
-    </ion-toolbar>
-</ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-back-button defaultHref="/"></ion-back-button>
+            </ion-buttons>
+            
+            <ion-title>{{paramPlace}}</ion-title>
+    
+            <ion-buttons slot="end">
+                <ion-menu-toggle>
+                    <ion-button>
+                        <ion-icon name="menu"></ion-icon>
+                    </ion-button>
+                </ion-menu-toggle>
+            </ion-buttons>
+    
+        </ion-toolbar>
+    </ion-header>
   
 <ion-content>
-    
-    
+
     <ion-row>
         
         <ion-col size-sm="6" offset-sm="3" size-md="4" offset-md="4">
