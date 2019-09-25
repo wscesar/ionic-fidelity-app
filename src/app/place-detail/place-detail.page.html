@@ -31,6 +31,17 @@
                 <h2 *ngIf="productLength == 0">Não há produtos cadastrados</h2>
             </ion-label>
 
+            <hr>
+
+            <ion-button
+                color="primary" expand="block" class="ion-margin-top"
+                [routerLink]="['/', 'promocoes', paramPlace, 'criar']" >
+                
+                <ion-icon name="add"></ion-icon>
+                Cadastrar Produto
+
+            </ion-button>
+
             <ion-list *ngIf="productLength > 0">
 
                 <div *ngFor="let product of products">

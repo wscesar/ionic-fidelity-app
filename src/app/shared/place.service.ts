@@ -6,68 +6,103 @@ import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
 import { Place } from './place.model';
 import { NavController } from '@ionic/angular';
-
-interface DataModel {
-    id: string;
-    title: string;
-    image: string;
-    score: number;
-}
+import { Product } from './product.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlaceService {
     
-    private baseUrl = 'https://my-dummy-database.firebaseio.com/places.json';
+    private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
     private _places = new BehaviorSubject<Place[]>([]);
+    private places: Place[];
+
+    products: Product[];
+    updatedProducts: Product[] = [];
     
     get getPlaces() {
         return this._places.asObservable();
+        // return this._places.slice();
+    }
+
+    getProducts() {
+        return this.products;
+    }
+
+    setPlaces(places: Place[]) {
+        this.places = places;
+    }
+
+    setProducts(products: Product[]) {
+        this.products = products;
     }
     
-    private places: Place[];
-
     constructor(private http: HttpClient, private navCtrl: NavController) {}
 
     fetchPlaces() {
         return this.http
-        .get<{ [key: string]: Place }> (
-            this.baseUrl
-        )
+        .get<Place[]>(this.baseUrl)
         .pipe(
-            map( response => {
+            map( _places => {
 
-                const places = [];
+                const newPlaces = [];
 
-                for ( const key in response ) {
-                    if ( response.hasOwnProperty(key) ) {
-                        places.push (
-                            new Place (
-                                key,
-                                response[key].title,
-                                response[key].image,
-                                response[key].openingTime,
-                                response[key].closingTime,
-                                response[key].score
-                            )
+                for ( const key in _places ) {
+                    newPlaces.push (
+                        new Place (
+                            key,
+                            _places[key].title,
+                            _places[key].image,
+                            _places[key].openingTime,
+                            _places[key].closingTime,
+                            _places[key].score,
+                            _places[key].products
                         )
-                    }
+                    )
                 }
 
-                this.places = places;
-                return places;
+                this.places = newPlaces;
+                return this.places;
             }),
             
             tap( places => {
                 this._places.next(places)
+                // this.placeService.setRecipes(places);
             })
             
         )
     }
 
 
+    
+
+    updateProducts(paramPlace: string, product: Product) {
+
+        for (let key in this.places) {
+
+            if ( this.places[key].title === paramPlace ) {
+
+                let place = this.places[key];
+                this.updatedProducts = place.products ? place.products : [];
+                this.updatedProducts.push(product);
+
+                let updatedPlace = {
+                    ...place,
+                    products: this.updatedProducts
+                }
+
+                this.places[key] = updatedPlace;
+
+                // this.updatePlaces(updatedPlace)
+                this.updatePlaces()
+
+            }
+        }
+
+    }
+
     updatePlaces() {
+        // .put<{name: string}>( this.baseUrl, {...place} )
         this.http
             .put( this.baseUrl, this.places )
             .subscribe( response => {
@@ -75,26 +110,11 @@ export class PlaceService {
                 console.log(response)
             });
     }
-
-
-    setPlaces(places: Place[]) {
-        this.places = places;
-    }
-
     
-    addPlace( title: string, image: string,
-                openingTime: string, closingTime: string, score: number) {
+   
+    addPlace( newPlace: Place ) {
         
         let firebaseId: string;
-
-        const newPlace = new Place (
-            null,
-            title,
-            image,
-            openingTime,
-            closingTime,
-            score
-        );
 
         return this.http
             .post<{ name: string }> (
@@ -106,13 +126,13 @@ export class PlaceService {
                     firebaseId = response.name;
                     return this.getPlaces;
                 }),
-            
+
                 take(1),
                 
                 tap ( places => {
                     newPlace.id = firebaseId;
                     this._places.next(places.concat(newPlace));
-            })
-          );
+                })
+            );
       }
 }

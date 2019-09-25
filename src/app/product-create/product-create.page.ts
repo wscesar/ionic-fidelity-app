@@ -9,6 +9,7 @@ import { Product } from '../shared/product.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { PlaceService } from '../shared/place.service';
 
 
 @Component({
@@ -18,15 +19,16 @@ import { Subscription } from 'rxjs';
 export class ProductCreatePage implements OnInit {
     baseUrl = 'https://my-dummy-database.firebaseio.com/products.json';
     form: FormGroup;
-    products: Product[];
     product: Product;
-    paramPlace: string;
+    products: Product[];
     subscription: Subscription;
+    paramPlace: string;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private http: HttpClient,
+        private placeService: PlaceService,
         private productService: ProductService,
         private loadingCtrl: LoadingController,
         private navCtrl: NavController,
@@ -34,9 +36,7 @@ export class ProductCreatePage implements OnInit {
     ) {}
 
     ionViewWillEnter() {
-        this.productService.fetchData().subscribe(() => {
-            console.log(this.products)
-        });
+        this.productService.fetchData().subscribe();
     }
 
     ngOnInit() {
@@ -70,26 +70,35 @@ export class ProductCreatePage implements OnInit {
     
     onFormSubmit() {
 
-        const nroduct = new Product (
-            this.paramPlace,
+        const newProduct = new Product (
+            null, //this.paramPlace,
             this.form.value.product,
             +this.form.value.score,
             this.form.value.image,
         );
-        
-        this.products.push(nroduct);
-        this.productService.setProducts(this.products);
-        this.productService.updateProducts();
 
-        this.alertCtrl
-            .create({
-                header: 'Ok',
-                message: 'Promocao cadastrada com sucesso'
-            })
-            .then(alertEl => {
-                alertEl.present();
-                this.navCtrl.navigateBack('/');
-            })
+        // let uProducts = this.placeService.getProducts();
+
+        // for(let i in uProducts){
+
+        // }
+        
+        // this.products.push(newProduct);
+        this.placeService.updateProducts(this.paramPlace, newProduct);
+
+        // console.log(this.product)
+        // this.productService.setProducts(this.products);
+        // this.productService.updateProducts();
+
+        // this.alertCtrl
+        //     .create({
+        //         header: 'Ok',
+        //         message: 'Promocao cadastrada com sucesso'
+        //     })
+        //     .then(alertEl => {
+        //         alertEl.present();
+        //         this.navCtrl.navigateBack('/');
+        //     })
 
     }
 

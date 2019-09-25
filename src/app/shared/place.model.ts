@@ -1,3 +1,5 @@
+import { Product } from './product.model'
+
 export class Place {
     constructor(
         public id: string,
@@ -5,6 +7,7 @@ export class Place {
         public image: string,
         public openingTime: string,
         public closingTime: string,
-        public score: number
+        public score: number,
+        public products: Product[]
     ) {}
 }

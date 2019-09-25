@@ -26,7 +26,7 @@ export class UserScorePage implements OnInit {
 
     ionViewDidEnter() {
         this.isLoadingPlaces = true;
-        this.placeService.fetchPlaces().subscribe(response => {
+        this.placeService.fetchPlaces().subscribe(() => {
             this.isLoadingPlaces = false;
         });
         
@@ -40,10 +40,12 @@ export class UserScorePage implements OnInit {
     ngOnInit() {
         this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
             this.places = response;
+            this.placeService.setPlaces(response);
         });
 
         this.productSubscription = this.productService.getProducts.subscribe(response => {
             this.products = response;
+            this.placeService.setProducts(response);
         });
     }
     

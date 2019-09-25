@@ -18,22 +18,22 @@
     </ion-toolbar>
 </ion-header>
   
-<ion-content padding>
+<ion-content class="ion-padding">
     <ion-row>
         <ion-col size-md="6" offset-md="3">
             <form [formGroup]="form" (submit)="onFormSubmit()">
             
-                <ion-item class="ion-margin-bottom ion-no-padding">
+                <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">Promoção</ion-label>
                     <ion-input formControlName="product"></ion-input>
                 </ion-item>
     
-                <ion-item class="ion-margin-bottom ion-no-padding">
+                <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">Imagem</ion-label>
                     <ion-input formControlName="image"></ion-input>
                 </ion-item>
             
-                <ion-item class="ion-margin-bottom ion-no-padding">
+                <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">Pontos</ion-label>
                     <ion-input formControlName="score"></ion-input>
                 </ion-item>

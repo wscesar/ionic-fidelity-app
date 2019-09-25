@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PlaceService } from '../shared/place.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { Place } from '../shared/place.model';
 
 @Component({
   selector: 'app-place-create',
@@ -54,21 +55,21 @@ export class PlaceCreatePage implements OnInit {
         this.loadingCtrl.create({ message: 'Salvando...' }).then( loadingEl => {
             
             loadingEl.present();
-        
-            this.placesService.addPlace (
-                
+
+            const newPlace = new Place(
+                null,
                 this.form.value.place,
                 this.form.value.image,
                 this.form.value.openingTime,
                 this.form.value.closingTime,
-                +this.form.value.score
-
-            ) .subscribe( () => {
-
+                +this.form.value.score,
+                null
+            );
+        
+            this.placesService.addPlace (newPlace) .subscribe( () => {
                 loadingEl.dismiss();
                 this.form.reset();
                 this.router.navigate(['/meus-pontos']);
-
             });
         });
     }

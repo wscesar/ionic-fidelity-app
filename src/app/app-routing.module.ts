@@ -64,6 +64,7 @@ const routes: Routes = [
     },
   
     { path: 'product-create', loadChildren: './product-create/product-create.module#ProductCreatePageModule' },
+
   
 
 ];
