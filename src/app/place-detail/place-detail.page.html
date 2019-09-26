@@ -18,37 +18,37 @@
         </ion-toolbar>
     </ion-header>
   
-<ion-content>
+<ion-content class="ion-padding">
 
-    <ion-row>
+    <div *ngIf="isLoading" class="ion-padding ion-text-center">
+        <ion-spinner color="primary"></ion-spinner>
+    </div>
+
+    <ion-row *ngIf="!isLoading">
+
+        <ion-col size-md="6" offset-md="3">
         
-        <ion-col size-md="6" offset-md="3" size-md="4" offset-md="4">
-        
-            <ion-img [src]="place.image"></ion-img>
+            <ion-card>
+                <ion-img [src]="place.image"></ion-img>
+            </ion-card>
+
+            <ion-button
+                color="primary" expand="block" class="ion-margin-bottom"
+                [routerLink]="['/', 'promocoes', paramPlace, 'criar']" >
+                Cadastrar Produto
+            </ion-button>
 
             <ion-label class="ion-text-center">
                 <h2 *ngIf="productLength > 0">Produtos Disponíveis</h2>
                 <h2 *ngIf="productLength == 0">Não há produtos cadastrados</h2>
             </ion-label>
 
-            <hr>
-
-            <ion-button
-                color="primary" expand="block" class="ion-margin-top"
-                [routerLink]="['/', 'promocoes', paramPlace, 'criar']" >
-                
-                <ion-icon name="add"></ion-icon>
-                Cadastrar Produto
-
-            </ion-button>
-
             <ion-list *ngIf="productLength > 0">
-
+                
                 <div *ngFor="let product of products">
         
                     <ion-item
                         detail
-                        *ngIf="product.store === paramPlace"
                         [routerLink]="['/', 'promocoes', product.store, product.title]" >
         
                         <ion-thumbnail>

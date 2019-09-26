@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
 import { Place } from './place.model';
@@ -17,26 +17,25 @@ export class PlaceService {
     private _places = new BehaviorSubject<Place[]>([]);
     private places: Place[];
 
-    products: Product[];
-    updatedProducts: Product[] = [];
+    productss: Product[];
+    updatedProducts: Product[];
     
-    get getPlaces() {
+    get getPlaces(): Observable<Place[]> {
         return this._places.asObservable();
-        // return this._places.slice();
-    }
-
-    getProducts() {
-        return this.products;
     }
 
     setPlaces(places: Place[]) {
         this.places = places;
     }
 
-    setProducts(products: Product[]) {
-        this.products = products;
-    }
-    
+    // getProducts() {
+    //     return this.products;
+    // }
+
+    // setProducts(products: Product[]) {
+    //     this.products = products;
+    // }
+  
     constructor(private http: HttpClient, private navCtrl: NavController) {}
 
     fetchPlaces() {
@@ -73,12 +72,20 @@ export class PlaceService {
         )
     }
 
-
-    
+    getProducts(selectedPlace: string): Product[] {
+        for ( let key in this.places ) {
+            if ( this.places[key].title === selectedPlace ) {
+                let place = this.places[key];
+                let products = place.products ? place.products : [];
+                return products;
+            }
+        }
+        return [];
+    }
 
     updateProducts(paramPlace: string, product: Product) {
 
-        for (let key in this.places) {
+        for ( let key in this.places ) {
 
             if ( this.places[key].title === paramPlace ) {
 
@@ -93,7 +100,6 @@ export class PlaceService {
 
                 this.places[key] = updatedPlace;
 
-                // this.updatePlaces(updatedPlace)
                 this.updatePlaces()
 
             }
@@ -102,7 +108,6 @@ export class PlaceService {
     }
 
     updatePlaces() {
-        // .put<{name: string}>( this.baseUrl, {...place} )
         this.http
             .put( this.baseUrl, this.places )
             .subscribe( response => {

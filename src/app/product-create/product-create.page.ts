@@ -46,7 +46,6 @@ export class ProductCreatePage implements OnInit {
             this.products = response;
         });
 
-
         this.form = new FormGroup({
             
             product: new FormControl(null, {
@@ -77,6 +76,8 @@ export class ProductCreatePage implements OnInit {
             this.form.value.image,
         );
 
+        this.placeService.updateProducts(this.paramPlace, newProduct);
+
         // let uProducts = this.placeService.getProducts();
 
         // for(let i in uProducts){
@@ -84,7 +85,6 @@ export class ProductCreatePage implements OnInit {
         // }
         
         // this.products.push(newProduct);
-        this.placeService.updateProducts(this.paramPlace, newProduct);
 
         // console.log(this.product)
         // this.productService.setProducts(this.products);

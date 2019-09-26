@@ -132,7 +132,8 @@ export class ProductDetailPage implements OnInit {
                 if ( places[i].title === this.paramPlace ) {
                     this.placeList[i].score = this.userScore
                     this.placeService.setPlaces(this.placeList);
-                    this.placeService.updatePlaces();
+                    // this.placeService.updatePlaces();
+                    // this.placeService.updateProducts(this.paramPlace, );
                 }
             }
 

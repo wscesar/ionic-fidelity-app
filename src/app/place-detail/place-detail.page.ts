@@ -10,40 +10,21 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 @Component({
     selector: 'app-place-detail',
     templateUrl: './place-detail.page.html',
-    styleUrls: ['./place-detail.page.sass'],
 })
 export class PlaceDetailPage implements OnInit {
 
-    private subscription: Subscription;
     private paramPlace: string;
     private place: Place;
     private places: Place[];
     private products: Product[];
-    private isLoadingPlaces: boolean;
-    private isLoadingProducts: boolean;
+    private isLoading: boolean;
     private placeSubscription: Subscription;
-    private productSubscription: Subscription;
     private productLength: number;
 
     constructor (
         private route: ActivatedRoute,
         private placeService: PlaceService,
-        private productService: ProductService
     ) { }
-
-    ionViewWillEnter() {
-
-        this.isLoadingPlaces = true;
-        this.placeService.fetchPlaces().subscribe(() => {
-            this.isLoadingPlaces = false;
-        });
-        
-        this.isLoadingProducts = true;
-        this.productService.fetchData().subscribe(() => {
-            this.isLoadingProducts = false;
-        });
-        
-    }
 
     ngOnInit() {
 
@@ -62,19 +43,26 @@ export class PlaceDetailPage implements OnInit {
 
         });
 
-        this.productSubscription = this.productService.getProducts.subscribe(products => {
+    }
+
+    ionViewWillEnter() {
+
+        this.isLoading = true;
+
+        this.placeService.fetchPlaces().subscribe(() => {
             
             this.productLength = 0;
-            this.products = products;
 
-            for ( let i = 0 ; i < this.products.length ; i++ ) {
-                if ( this.products[i].store === this.paramPlace ) {
-                    this.productLength++;
-                }
+            this.products = this.placeService.getProducts(this.paramPlace);
+
+            for ( let key in this.products ) {
+                this.productLength++;
             }
 
-        });
+            this.isLoading = false;
 
+        });
+        
     }
 
 }
