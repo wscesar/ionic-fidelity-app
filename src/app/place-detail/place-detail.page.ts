@@ -46,23 +46,26 @@ export class PlaceDetailPage implements OnInit {
     }
 
     ionViewWillEnter() {
-
-        this.isLoading = true;
-
-        this.placeService.fetchPlaces().subscribe(() => {
-            
-            this.productLength = 0;
-
-            this.products = this.placeService.getProducts(this.paramPlace);
-
-            for ( let key in this.products ) {
-                this.productLength++;
-            }
-
-            this.isLoading = false;
-
-        });
         
+        this.isLoading = true;
+        
+        this.placeService.fetchPlaces().subscribe(() => {
+            this.setPageProducts();
+            this.isLoading = false;
+        });
+
+    }
+
+    private setPageProducts(): void {
+
+        this.productLength = 0;
+
+        this.products = this.placeService.getProducts(this.paramPlace);
+
+        for ( let key in this.products ) {
+            this.productLength++;
+        }
+
     }
 
 }
