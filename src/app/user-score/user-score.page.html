@@ -19,11 +19,11 @@
 </ion-header>
 
 <ion-content>
-    <div *ngIf="isLoadingPlaces || isLoadingPromotions" class="ion-padding ion-text-center">
+    <div *ngIf="isLoading" class="ion-padding ion-text-center">
         <ion-spinner color="primary"></ion-spinner>
     </div>
 
-    <ion-row *ngIf="!isLoadingPlaces && !isLoadingPromotions">
+    <ion-row *ngIf="!isLoading">
         <ion-col size-md="6" offset-md="3" class="ion-text-center">
             <ion-virtual-scroll [items]="places" approxItemHeight="70px">
                 <div *virtualItem="let place">

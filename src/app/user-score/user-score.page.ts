@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Place } from '../shared/place.model';
+import { Place } from '../model/place.model';
 import { PlaceService } from '../shared/place.service';
-import { ProductService } from '../shared/product.service';
-import { Product } from '../shared/product.model';
+import { Product } from '../model/product.model';
 
 @Component({
   selector: 'app-user-score',
@@ -11,55 +10,20 @@ import { Product } from '../shared/product.model';
 })
 export class UserScorePage implements OnInit {
     private places: Place[];
-    private products: Product[];
-    private isLoadingPlaces: boolean;
-    private isLoadingProducts: boolean;
+    private isLoading: boolean;
     private placeSubscription: Subscription;
-    private productSubscription: Subscription;
 
-
-    constructor(
-        private placeService: PlaceService,
-        private productService: ProductService
-    ) { }
-
+    constructor( private placeService: PlaceService ) { }
 
     ionViewDidEnter() {
-        this.isLoadingPlaces = true;
-        this.placeService.fetchPlaces().subscribe(() => {
-            this.isLoadingPlaces = false;
-        });
-        
-        this.isLoadingProducts = true;
-        this.productService.fetchData().subscribe(() => {
-            this.isLoadingProducts = false;
-        });
+        this.isLoading = true;
+        this.placeService.fetchPlaces().subscribe(() => this.isLoading = false );
     }
-
 
     ngOnInit() {
-        this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
-            this.places = response;
-            this.placeService.setPlaces(response);
-        });
-
-        this.productSubscription = this.productService.getProducts.subscribe(response => {
-            this.products = response;
-            this.placeService.setProducts(response);
-        });
-    }
-    
-
-    hasProduct ( placeId: string ) {
-        let products = this.products;
-
-        for ( let key in products ) {
-            if ( products[key].store === placeId ) {
-                return true;
-            }
-        }
-
-        return false;
+        this.placeSubscription =
+                this.placeService.getPlaces
+                        .subscribe( places => this.places = places );
     }
 
 }
