@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 
-import { Place } from './place.model';
+import { Place } from '../model/place.model';
 import { PlaceService } from './place.service';
 
 @Injectable({ providedIn: 'root' })
@@ -30,7 +30,7 @@ export class DataStorageService {
                     });
                 }),
                 tap(places => {
-                    this.placeService.setPlaces(places);
+                    // this.placeService.setPlaces(places);
                 })
             )
         }

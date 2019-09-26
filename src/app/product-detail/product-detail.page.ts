@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Place } from '../shared/place.model';
-import { Product } from '../shared/product.model';
+import { Place } from '../model/place.model';
+import { Product } from '../model/product.model';
 import { PlaceService } from '../shared/place.service';
-import { ProductService } from '../shared/product.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -36,7 +35,6 @@ export class ProductDetailPage implements OnInit {
         private navCtrl: NavController,
         private alertCtrl: AlertController,
         private placeService: PlaceService,
-        private productService: ProductService,
     ) { }
     
 
@@ -48,8 +46,6 @@ export class ProductDetailPage implements OnInit {
             this.getUserScore();
             this.getProductData();
             this.toggleButton();
-            console.log(this.product)
-            console.log(this.product.image)
         });
 
     }
@@ -78,7 +74,7 @@ export class ProductDetailPage implements OnInit {
 
         let products = this.placeService.getProducts(this.paramPlace);
 
-        for ( let i in products )  {
+        for ( let i in products ) {
 
             if ( products[i].title === this.paramProduct ) {
                 // this.product = products[i];
@@ -117,7 +113,7 @@ export class ProductDetailPage implements OnInit {
             for ( let i in places ) {
                 if ( places[i].title === this.paramPlace ) {
                     this.places[i].score = this.userScore
-                    this.placeService.setPlaces(this.places);
+                    // this.placeService.setPlaces(this.places);
                     // this.placeService.updatePlaces();
                     // this.placeService.updateProducts(this.paramPlace, );
                 }

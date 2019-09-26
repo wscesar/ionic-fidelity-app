@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PlaceService } from '../shared/place.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { Place } from '../shared/place.model';
+import { Place } from '../model/place.model';
 
 @Component({
   selector: 'app-place-create',

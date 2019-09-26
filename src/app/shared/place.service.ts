@@ -4,39 +4,28 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, of, Observable } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
-import { Place } from './place.model';
-import { NavController } from '@ionic/angular';
-import { Product } from './product.model';
+import { Place } from '../model/place.model';
+import { NavController, AlertController } from '@ionic/angular';
+import { Product } from '../model/product.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlaceService {
     
-    private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
-    private _places = new BehaviorSubject<Place[]>([]);
     private places: Place[];
+    private updatedProducts: Product[];
+    private placeSubject = new BehaviorSubject<Place[]>([]);
+    private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
 
-    productss: Product[];
-    updatedProducts: Product[];
+    constructor(
+        private http: HttpClient,
+        private navCtrl: NavController,
+        private alertCtrl: AlertController ) { }
     
     get getPlaces(): Observable<Place[]> {
-        return this._places.asObservable();
+        return this.placeSubject.asObservable();
     }
-
-    setPlaces(places: Place[]) {
-        this.places = places;
-    }
-
-    // getProducts() {
-    //     return this.products;
-    // }
-
-    // setProducts(products: Product[]) {
-    //     this.products = products;
-    // }
-  
-    constructor(private http: HttpClient, private navCtrl: NavController) {}
 
     fetchPlaces() {
         return this.http
@@ -65,22 +54,19 @@ export class PlaceService {
             }),
             
             tap( places => {
-                this._places.next(places)
+                this.placeSubject.next(places)
                 // this.placeService.setRecipes(places);
             })
             
         )
     }
 
-    getProducts(selectedPlace: string): Product[] {
-        for ( let key in this.places ) {
-            if ( this.places[key].title === selectedPlace ) {
-                let place = this.places[key];
-                let products = place.products ? place.products : [];
-                return products;
+    getProducts(selectedPlace: string) {
+        for ( let i in this.places ) {
+            if ( this.places[i].title === selectedPlace ) {
+                return this.places[i].products ? this.places[i].products : [];
             }
         }
-        return [];
     }
 
     updateProducts(paramPlace: string, product: Product) {
@@ -107,12 +93,20 @@ export class PlaceService {
 
     }
 
+    
     updatePlaces() {
         this.http
             .put( this.baseUrl, this.places )
-            .subscribe( response => {
-                this.navCtrl.navigateBack('/')
-                console.log(response)
+            .subscribe( () => {
+                this.alertCtrl
+                        .create({
+                            header: 'Ok',
+                            message: 'Produto cadastrada com sucesso'
+                        })
+                        .then(alertEl => {
+                            alertEl.present();
+                            this.navCtrl.navigateBack('/');
+                        });
             });
     }
     
@@ -136,7 +130,7 @@ export class PlaceService {
                 
                 tap ( places => {
                     newPlace.id = firebaseId;
-                    this._places.next(places.concat(newPlace));
+                    this.placeSubject.next(places.concat(newPlace));
                 })
             );
       }
