@@ -39,11 +39,11 @@
             </ion-button>
 
             <ion-label class="ion-text-center">
-                <h2 *ngIf="productLength > 0">Produtos Disponíveis</h2>
-                <h2 *ngIf="productLength == 0">Não há produtos cadastrados</h2>
+                <h2 *ngIf="products">Produtos Disponíveis</h2>
+                <h2 *ngIf="!products">Não há produtos cadastrados</h2>
             </ion-label>
 
-            <ion-list *ngIf="productLength > 0">
+            <ion-list *ngIf="products">
                 
                 <div *ngFor="let product of products">
         
