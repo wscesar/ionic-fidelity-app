@@ -16,23 +16,20 @@ import { Subscription } from 'rxjs';
 export class ProductDetailPage implements OnInit {
 
     private placeSubscription: Subscription;
-    private productSubscription: Subscription;
-    private isLoadingPlaces: boolean;
-    private isLoadingProducts: boolean;
-    title: string;
-    image: string;
-    productScore: number;
-    userScore: number;
-    paramPlace: string;
-    paramProduct: string;
+    private isLoading: boolean;
+    private image: string;
+    private title: string;
+    private productScore: number;
+    private userScore: number;
+    private paramPlace: string;
+    private paramProduct: string;
     
-    placeList: Place[];
-    productList: Product[];
-    lenght: number = 0 ;
+    private place: Place;
+    private places: Place[];
+    private product: Product;
+    private products: Product[];
 
-    place: Place;
-
-    disableButton = false;
+    private disableButton = false;
 
     constructor (
         private route: ActivatedRoute,
@@ -45,43 +42,33 @@ export class ProductDetailPage implements OnInit {
 
     ionViewWillEnter(){
         
-        this.isLoadingPlaces = true;
+        this.isLoading = true;
         this.placeService.fetchPlaces().subscribe(() => {
-            this.isLoadingPlaces = false;
+            this.isLoading = false;
             this.getUserScore();
-            this.toggleButton();
-        });
-
-        this.isLoadingProducts = true;
-        this.productService.fetchData().subscribe(() => {
-            this.isLoadingProducts = false;
             this.getProductData();
             this.toggleButton();
+            console.log(this.product)
+            console.log(this.product.image)
         });
+
     }
 
 
     ngOnInit() {
         this.paramPlace = this.route.snapshot.paramMap.get("place");
         this.paramProduct = this.route.snapshot.paramMap.get("product");
-        
-        // this.productList = this.productService.products;
-        this.productSubscription = this.productService.getProducts.subscribe(response => {
-            this.productList = response;
-        });
-        
-        // this.placeList = this.placeService.places;
+
         this.placeSubscription = this.placeService.getPlaces.subscribe(response => {
-            this.placeList = response;
+            this.places = response;
         });
 
     }
 
-
      getUserScore() {
-        for ( let i in this.placeList )  {
-            if ( this.placeList[i].title === this.paramPlace ) {
-                this.userScore = this.placeList[i].score;
+        for ( let i in this.places )  {
+            if ( this.places[i].title === this.paramPlace ) {
+                this.userScore = this.places[i].score;
             }
         }
     }
@@ -89,32 +76,31 @@ export class ProductDetailPage implements OnInit {
 
     getProductData() {
 
-        let promo = this.productList;
+        let products = this.placeService.getProducts(this.paramPlace);
 
-        for ( let i in promo )  {
-            if (
-                promo[i].title === this.paramProduct &&
-                promo[i].store === this.paramPlace
-            ) {
-                this.title = promo[i].title;
-                this.image = promo[i].image;
-                this.productScore = promo[i].score;
+        for ( let i in products )  {
+
+            if ( products[i].title === this.paramProduct ) {
+                // this.product = products[i];
+                this.title = products[i].title;
+                this.image = products[i].image;
+                this.productScore = products[i].score;
             }
         }
     }
 
 
     toggleButton() {
-        let places = this.placeList;
+        let places = this.places;
         
         for ( let i in places ) {
+
             if ( places[i].title === this.paramPlace ) {
-                console.log(places[i])
-                console.log(this.productScore)
-                if ( this.placeList[i].score < this.productScore ) {
+                if ( this.places[i].score < this.productScore ) {
                     this.disableButton = true;
                 }
             }
+
         }
     }
 
@@ -126,12 +112,12 @@ export class ProductDetailPage implements OnInit {
 
             this.userScore = uScore - pScore; //set new score
 
-            let places = this.placeList;
+            let places = this.places;
 
             for ( let i in places ) {
                 if ( places[i].title === this.paramPlace ) {
-                    this.placeList[i].score = this.userScore
-                    this.placeService.setPlaces(this.placeList);
+                    this.places[i].score = this.userScore
+                    this.placeService.setPlaces(this.places);
                     // this.placeService.updatePlaces();
                     // this.placeService.updateProducts(this.paramPlace, );
                 }

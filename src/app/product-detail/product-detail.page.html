@@ -18,11 +18,11 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="isLoadingPlaces || isLoadingPromotions" class="ion-padding ion-text-center">
+<ion-content *ngIf="isLoading" class="ion-padding ion-text-center">
     <ion-spinner color="primary"></ion-spinner>
 </ion-content>
 
-<ion-content  *ngIf="!isLoadingPlaces && !isLoadingPromotions">
+<ion-content  *ngIf="!isLoading">
   
   <ion-row>
     <ion-col size-md="6" offset-md="3">
