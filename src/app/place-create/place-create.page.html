@@ -18,8 +18,8 @@
         </ion-toolbar>
     </ion-header>
 
-<ion-content padding>
-  <form [formGroup]="form" (submit)="onInsertData()">
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (submit)="onInsert()">
     
     <ion-item class="ion-margin-bottom">
         <ion-label position="floating">Restaurante</ion-label>
@@ -51,17 +51,7 @@
         <ion-input formControlName="image"></ion-input>
     </ion-item>
 
-    <!-- <div formArrayName="ingredients">
-        <div class="row" [formGroupName]="i" 
-            *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index" >
-            <br><input type="text" formControlName="name">
-            <br><input type="number" formControlName="amount">
-            <br><button type="button" (click)="onDeleteProduct">X</button>
-            <br><button type="button" (click)="onAddProduct()">Add Ingredient</button>
-        </div>
-    </div> -->
-    
-    <ion-button type="submit"  expand="block">Salvar</ion-button>
+    <ion-button type="submit" expand="block">Salvar</ion-button>
 
   </form>
 

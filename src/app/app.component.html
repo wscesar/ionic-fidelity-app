@@ -4,13 +4,17 @@
     
         <ion-header>
             <ion-toolbar>
-                <ion-title>MyApp</ion-title>
+                <ion-title>MyApps</ion-title>
             </ion-toolbar>
         </ion-header>
     
         <ion-content>
             <ion-list>
-            
+
+                <ion-item  *ngFor="let item of items | async">
+                    {{item.nome}}
+                </ion-item>
+
                 <ion-menu-toggle>
                     <ion-item lines="none" routerLink="/meus-pontos">
                         <ion-icon name="star" slot="start"></ion-icon>
@@ -36,6 +40,9 @@
         </ion-content>
     
     </ion-menu>
+
+    
+    
 
     <ion-router-outlet main></ion-router-outlet>
 

@@ -28,7 +28,7 @@
 
         <ion-col size-md="6" offset-md="3">
         
-            <ion-card>
+            <ion-card *ngIf="image">
                 <ion-img [src]="place.image"></ion-img>
             </ion-card>
 
@@ -44,13 +44,11 @@
             </ion-label>
 
             <ion-list *ngIf="products">
-                
-                <div *ngFor="let product of products">
-        
-                    <ion-item
-                        detail
-                        [routerLink]="['/', 'promocoes', paramPlace, product.title]" >
-        
+
+                <ion-item-sliding *ngFor="let product of products">
+                    
+                    <ion-item detail [routerLink]="['/', 'promocoes', paramPlace, product.title]" >
+                    
                         <ion-thumbnail>
                             <ion-img [src]="product.image"></ion-img>
                         </ion-thumbnail>
@@ -59,10 +57,23 @@
                             <h2>{{ product.title }}</h2>
                             <p>Pontos: {{ product.score }}</p>
                         </ion-label>
-        
+
                     </ion-item>
-                    
-                </div>
+                        
+                    <ion-item-options side="end">
+                        
+                        <ion-item-option>
+                            <ion-icon name="create"></ion-icon>
+                        </ion-item-option>
+
+                        <ion-item-option color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                        
+                        </ion-item-option>
+
+                    </ion-item-options>
+
+                </ion-item-sliding>
             
             </ion-list>  
 

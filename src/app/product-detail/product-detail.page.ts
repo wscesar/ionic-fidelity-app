@@ -92,8 +92,8 @@ export class ProductDetailPage implements OnInit {
     }
 
     useVoucher() {
-        let uScore =  this.userScore
-        let pScore =  this.productScore
+        let uScore = this.userScore
+        let pScore = this.productScore
 
         if ( uScore >= pScore ) {
 
@@ -107,7 +107,8 @@ export class ProductDetailPage implements OnInit {
 
             this.toggleButton();
 
-            this.uiManager.alert('Ok', 'Você acaba de resgatar seu brinde', '/')
+            this.uiManager.alert('Ok', 'Você acaba de resgatar seu brinde')
+            this.uiManager.navigateTo('/')
 
         } else {
             this.disableButton = true;

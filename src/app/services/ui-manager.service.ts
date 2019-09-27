@@ -24,7 +24,7 @@ export class UiManagerService {
     }
 
 
-    alert(header: string, message: string, route: string) {
+    alert(header: string, message: string) {
         this.alertCtrl
             .create({
                 header: header,
@@ -33,12 +33,11 @@ export class UiManagerService {
             .then(alertEl => {
                 this.loading.dismiss();
                 alertEl.present();
-                this.navCtrl.navigateBack(route);
             });
     }
 
     navigateTo(route: string){
-        this.navCtrl.navigateBack(route)
+        this.navCtrl.navigateForward(route)
     }
 }
 

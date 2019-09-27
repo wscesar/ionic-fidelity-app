@@ -47,9 +47,13 @@ const routes: Routes = [
                         loadChildren: './product-create/product-create.module#ProductCreatePageModule'
                     },
                     {
-                        path: ':product', 
-                        loadChildren: './product-detail/product-detail.module#ProductDetailPageModule'
+                        path: ':action', 
+                        loadChildren: './place-create/place-create.module#PlaceCreatePageModule'
                     },
+                    // {
+                    //     path: ':product', 
+                    //     loadChildren: './product-detail/product-detail.module#ProductDetailPageModule'
+                    // },
                     {
                         path: '',
                         loadChildren: './place-detail/place-detail.module#PlaceDetailPageModule'
