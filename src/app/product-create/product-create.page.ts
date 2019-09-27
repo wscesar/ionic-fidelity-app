@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { LoadingController, AlertController, NavController } from '@ionic/angular';
-
 import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { LoadingController, AlertController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { PlaceService } from '../shared/place.service';
 import { Product } from '../model/product.model';
+import { DBService } from '../services/db.service';
+import { UiManagerService } from '../services/ui-manager.service';
 
 
 @Component({
@@ -24,12 +23,10 @@ export class ProductCreatePage implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private http: HttpClient,
-        private placeService: PlaceService,
-        private loadingCtrl: LoadingController,
-        private navCtrl: NavController,
-        private alertCtrl: AlertController
+        private dbService: DBService,
+        private uiManager: UiManagerService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit() {
@@ -58,16 +55,21 @@ export class ProductCreatePage implements OnInit {
     
     onFormSubmit() {
 
+        this.uiManager.showLoading();
+
         const newProduct = new Product (
             this.form.value.product,
             +this.form.value.score,
             this.form.value.image,
         );
 
-        this.placeService.updateProducts(this.paramPlace, newProduct);
+        this.dbService
+                .updateProducts(this.paramPlace, newProduct)
+                .subscribe( () => {
+                    this.uiManager.hideProgressBar();
+                    this.uiManager.navigateTo('/promocoes/'+this.paramPlace);
+                });
 
     }
-
-    
 
 }

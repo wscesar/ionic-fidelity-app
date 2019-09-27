@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Place } from '../model/place.model';
-import { PlaceService } from '../shared/place.service';
-import { Product } from '../model/product.model';
+import { DBService } from '../services/db.service';
 
 @Component({
   selector: 'app-user-score',
@@ -13,16 +12,16 @@ export class UserScorePage implements OnInit {
     private isLoading: boolean;
     private placeSubscription: Subscription;
 
-    constructor( private placeService: PlaceService ) { }
+    constructor( private dbService: DBService ) { }
 
     ionViewDidEnter() {
         this.isLoading = true;
-        this.placeService.fetchPlaces().subscribe(() => this.isLoading = false );
+        this.dbService.fetchPlaces().subscribe(() => this.isLoading = false );
     }
 
     ngOnInit() {
         this.placeSubscription =
-                this.placeService.getPlaces
+                this.dbService.getPlaces
                         .subscribe( places => this.places = places );
     }
 

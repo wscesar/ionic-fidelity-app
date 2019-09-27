@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Place } from '../model/place.model';
 import { Product } from '../model/product.model';
-import { PlaceService } from '../shared/place.service';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { DBService } from '../services/db.service';
 
 @Component({
     selector: 'app-place-detail',
@@ -20,32 +19,30 @@ export class PlaceDetailPage implements OnInit {
 
     constructor (
         private route: ActivatedRoute,
-        private placeService: PlaceService,
-    ) { }
+        private dbService: DBService
+    ) {}
 
     ngOnInit() {
 
         this.paramPlace = this.route.snapshot.paramMap.get("place");
 
-        this.placeSubscription = this.placeService.getPlaces.subscribe(places => {
-            places.forEach( place => {
+        this.placeSubscription = this.dbService.getPlaces.subscribe(places => {
+            for ( let place of places ) {
                 if ( place.title === this.paramPlace ) {
                     this.place = place;
                 }
-            });
+            }
         });
 
     }
 
     ionViewWillEnter() {
-        
         this.isLoading = true;
         
-        this.placeService.fetchPlaces().subscribe(() => {
-            this.products = this.placeService.getProducts(this.paramPlace);
+        this.dbService.fetchPlaces().subscribe(() => {
+            this.products = this.dbService.getProducts(this.paramPlace);
             this.isLoading = false;
         });
-
     }
 
 }
