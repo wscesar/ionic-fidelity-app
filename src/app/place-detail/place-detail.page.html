@@ -5,7 +5,7 @@
                 <ion-back-button defaultHref="/"></ion-back-button>
             </ion-buttons>
             
-            <ion-title>{{paramPlace}}</ion-title>
+            <ion-title>{{restaurantTitle}}</ion-title>
     
             <ion-buttons slot="end">
                 <ion-menu-toggle>
@@ -28,8 +28,8 @@
 
         <ion-col size-md="6" offset-md="3">
         
-            <ion-card *ngIf="image">
-                <ion-img [src]="place.image"></ion-img>
+            <ion-card *ngIf="restaurantImage">
+                <ion-img [src]="restaurantImage"></ion-img>
             </ion-card>
 
             <ion-button
@@ -47,9 +47,9 @@
 
                 <ion-item-sliding *ngFor="let product of products">
                     
-                    <ion-item detail [routerLink]="['/', 'promocoes', paramPlace, product.title]" >
+                    <ion-item detail [routerLink]="['/', 'promocoes', paramPlace, product.id]" >
                     
-                        <ion-thumbnail>
+                        <ion-thumbnail class="ion-margin">
                             <ion-img [src]="product.image"></ion-img>
                         </ion-thumbnail>
             
@@ -68,7 +68,6 @@
 
                         <ion-item-option color="danger">
                             <ion-icon name="trash"></ion-icon>
-                        
                         </ion-item-option>
 
                     </ion-item-options>

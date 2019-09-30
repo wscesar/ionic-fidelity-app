@@ -2,12 +2,12 @@ import { Product } from './product.model'
 
 export class Place {
     constructor(
+        public closingTime: string,
         public id: string,
-        public title: string,
         public image: string,
         public openingTime: string,
-        public closingTime: string,
+        public products: Product[],
         public score: number,
-        public products: Product[]
-    ) {}
+        public title: string,
+        ) {}
 }

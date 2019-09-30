@@ -12,7 +12,10 @@ import { DBService } from '../services/db.service';
 })
 export class PlaceDetailPage implements OnInit {
 
+    restaurantTitle: string
+    restaurantImage: string
     private paramPlace: string;
+
     private place: Place;
     private products: Product[];
     private isLoading: boolean;
@@ -30,45 +33,22 @@ export class PlaceDetailPage implements OnInit {
         this.paramPlace = this.route.snapshot.paramMap.get("place");
         this.id = this.paramPlace
 
-
-        this.dbService.getRestaurants().subscribe(places => {
-            console.log(places)
-            this.isLoading = false;
-            for ( let place of places ) {
-                if ( place.title === this.paramPlace ) {
-                    this.place = place;
-                    this.products = place.products;
-                    
-                }
-            }
-        });
-
-        
-
-        // this.placeSubscription = this.dbService.getPlaces.subscribe(places => {
-        //     for ( let place of places ) {
-        //         if ( place.title === this.paramPlace ) {
-        //             this.place = place;
-        //         }
-        //     }
-        // });
-
     }
 
     ionViewWillEnter() {
-        this.dbService.getProducts2(this.paramPlace).subscribe(places => {
-            console.log(places)
+        this.isLoading = true;
+
+        this.dbService.getProducts(this.paramPlace).subscribe(products => {
+            this.products = products;
+            this.isLoading = false;
         });
 
-        this.dbService.getRestaurant(this.paramPlace).subscribe(places => {
-            console.log(places)
+        this.dbService.getRestaurant(this.paramPlace).subscribe(restaurant => {
+            this.place = restaurant
+            this.restaurantTitle = restaurant.title
+            this.restaurantImage = restaurant.image
+            this.isLoading = false;
         });
-        // this.isLoading = true;
-        
-        // this.dbService.fetchPlaces().subscribe(() => {
-        //     this.products = this.dbService.getProducts(this.paramPlace);
-        //     this.isLoading = false;
-        // });
     }
 
 }

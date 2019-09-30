@@ -2,77 +2,122 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 
+import * as firebase from 'firebase';
+
 import { Place } from '../model/place.model';
 import { BehaviorSubject, Observable, Subscriber, Subscribable } from 'rxjs';
 import { Product } from '../model/product.model';
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 
 
-@Injectable({ providedIn: 'root' })
+// interface productModel {
+//     title: string,
+//     score: number,
+//     image: string
+// }
+export interface AuthResponseData {
+    kind: string;
+    idToken: string;
+    email: string;
+    refreshToken: string;
+    expiresIn: string;
+    localId: string;
+    registered?: boolean;
+}
 
+@Injectable({ providedIn: 'root' })
 export class DBService {
     restaurants: Observable<any[]>;
 
     private places: Place[];
-    private placeSubject = new BehaviorSubject<Place[]>([]);
-    private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
-
+    private product: Product;
+    // private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
+    private signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCP3Zn7rkATaRdv_oIan2JHcS8YtDfJecc'
+    private signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCP3Zn7rkATaRdv_oIan2JHcS8YtDfJecc'
+    private token: string = null;
 
     constructor (
         private db: AngularFirestore,
-        private http: HttpClient ) {
-        }
+        private http: HttpClient ) {}
 
-        
-    get getPlaces(): Observable<Place[]> {
-        return this.placeSubject.asObservable();
+    signIn( email: string, password: string ) {
+        // return this.http.post( this.signInUrl, { email, password } )
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .catch(error => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+
+            console.log(errorMessage)
+            
+        });
+    }
+    
+    signUp( email: string, password: string ) {
+        return this.http.post( this.signUpUrl, { email, password } )
+    }
+
+    setToken(token: string) {
+        this.token = token;
     }
 
     getRestaurants() {
         return this.db
-                    .collection('Restaurants')
+                    .collection<Place[]>('Restaurants')
                     .snapshotChanges()
                     .pipe (
-                        map ( ( places: DocumentChangeAction<any>[] ) => {
-                            return places.map((a: DocumentChangeAction<any>) => {
-                                // const data: Object = a.payload.doc.data() as any;
-                                const data = a.payload.doc.data();
-                                const id = a.payload.doc.id;
+                        map ( ( docArray: DocumentChangeAction<any>[] ) => {
+                            return docArray.map((doc: DocumentChangeAction<any>) => {
+                                const data: Place = doc.payload.doc.data();
+                                const id = doc.payload.doc.id;
                                 return { ...data, id };
                             });
                         }),
                     );
     }
 
-    getRestaurant(x: string) {
+    getRestaurant(restaurantId: string) {
         return this.db
-                    .doc('Restaurants/'+x)
-                    .valueChanges()
-                    // .pipe (
-                    //     map ( ( places: DocumentChangeAction<any>[] ) => {
-                    //         return places.map((a: DocumentChangeAction<any>) => {
-                    //             const data = a.payload.doc.data();
-                    //             const id = a.payload.doc.id;
-                    //             return { ...data, id };
-                    //         });
-                    //     }),
-                    // );
-    }
-
-    getProducts2(x: string) {
-        return this.db
-                    .collection('Restaurants/'+x+'/products')
+                    .doc<Place>('Restaurants/'+restaurantId)
                     .snapshotChanges()
                     .pipe (
-                        map ( ( places: DocumentChangeAction<any>[] ) => {
-                            return places.map((a: DocumentChangeAction<any>) => {
-                                const data = a.payload.doc.data();
-                                const id = a.payload.doc.id;
-                                return { ...data, id };
+                        map ( doc => {
+                            const data = doc.payload.data()
+                            const id = doc.payload.id;
+                            const products = null
+                            return { ...data, id, products };
+                        })
+                    );
+    }
+
+    getProducts(restaurantId: string) {
+        return this.db
+                    .collection('Restaurants/' + restaurantId + '/products')
+                    .snapshotChanges()
+                    .pipe (
+                        map ( ( docArray: DocumentChangeAction<any>[] ) => {
+                            return docArray.map( ( doc: DocumentChangeAction<any> ) => {
+                                // const data: productModel= doc.payload.doc.data();
+                                const data: Product = doc.payload.doc.data();
+                                const id = doc.payload.doc.id;
+                                return {...data, id};
                             });
                         }),
                     );
     }
+
+    getProduct(restaurantId: string, productId: string) {
+        return this.db
+                    .doc<Product>('Restaurants/'+restaurantId+'/products/'+productId)
+                    .snapshotChanges()
+                    .pipe (
+                        map ( doc => {
+                            const data = doc.payload.data()
+                            const id = doc.payload.id;
+                            return { ...data, id };
+                        })
+                    );
+    } 
 
     addRestaurant(place: Place) {
         return this.db.collection('Restaurants').add(place)
@@ -82,87 +127,26 @@ export class DBService {
         return this.db.collection('Restaurants').doc(id).update(place)
     }
 
-
-    getProducts(selectedPlace: string) {
-        for ( let place of this.places ) {
-            if ( place.title === selectedPlace ) {
-                return place.products ? place.products : [];
-            }
-        }
+    deletePlace(id: string) {
+        return this.db.collection('Restaurants').doc(id).delete()
     }
 
-
-    deletePlace(  ) {
-        return this.http.delete( this.baseUrl )
+    addProduct(restaurantId: string, product: Product) {
+        return this.db
+                    .collection(`Restaurants/${restaurantId}/products/`)
+                    .add(product)
     }
 
-
-    
-    insertPlace( newPlace: Place ) {
-        let x: Subscribable<any>;
-        
-        
-        for ( let i in this.places ) {
-            let place = this.places[i]
-            
-            if ( place.title === newPlace.title ) {
-                return x
-            }
-        }
-        
-        return this.http.post( this.baseUrl, { ...newPlace } )
+    updateProduct(restaurantId: string, productId: string, place: Place) {
+        return this.db
+                    .doc(`Restaurants/${restaurantId}/products/${productId}`)
+                    .update(place)
     }
 
-    
-    updatePlaces(places: Place[]) {
-        return this.http.put( this.baseUrl, places )
+    deleteProduct(restaurantId: string, productId: string) {
+        return this.db
+                    .doc(`Restaurants/${restaurantId}/products/${productId}`)
+                    .delete()
     }
 
-
-    updateProducts(paramPlace: string, product: Product) {
-
-        let products: Product[];
-
-        for ( let place of this.places ) {
-
-            if ( place.title === paramPlace ) {
-
-                products = place.products ? place.products : [];
-                products.push(product);
-
-                let updatedPlace = {
-                    ...place,
-                    products: products
-                }
-
-                place = updatedPlace;
-
-                return this.http.put( this.baseUrl, this.places )
-
-            }
-
-        }
-
-    }
-    
-
-    fetchPlaces() {
-        return this.http
-        .get<Place[]>(this.baseUrl)
-        .pipe(
-            map( places => {
-                const fetchedPlaces = [];
-
-                for ( const key in places ) {
-                    fetchedPlaces.push( {...places[key]} );
-                }
-
-                this.places = fetchedPlaces;
-                return this.places;
-            }),
-            tap( places => {
-                this.placeSubject.next(places)
-            })
-        )
-    }
 }

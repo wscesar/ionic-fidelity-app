@@ -61,23 +61,22 @@ export class PlaceCreatePage implements OnInit {
         this.action = this.route.snapshot.paramMap.get("action");
        
         if (this.action === 'editar') {
+            
             this.placeTitle = this.route.snapshot.paramMap.get("place");
+            
+            // this.dbService.getRestaurants.subscribe( places => this.places = places );
 
-            let placeSubscription =
-                this.dbService.getPlaces
-                        .subscribe( places => this.places = places );
-
-            for ( let place of this.places ) {
-                if ( place.title === this.placeTitle ) {
-                    this.form.patchValue({
-                        place: place.title,
-                        image: place.image,
-                        openingTime: place.openingTime,
-                        closingTime: place.closingTime,
-                        score: place.score,
-                    })
-                }
-            }
+            // for ( let place of this.places ) {
+            //     if ( place.title === this.placeTitle ) {
+            //         this.form.patchValue({
+            //             place: place.title,
+            //             image: place.image,
+            //             openingTime: place.openingTime,
+            //             closingTime: place.closingTime,
+            //             score: place.score,
+            //         })
+            //     }
+            // }
             
         }
     }
@@ -104,12 +103,12 @@ export class PlaceCreatePage implements OnInit {
             }
         }
 
-        this.dbService
-                .updatePlaces(this.places)
-                .subscribe( () => {
-                    this.uiManager.hideProgressBar()
-                    this.uiManager.navigateTo('/')
-                } );;
+        // this.dbService
+        //         .updateRestaurant(this.places)
+        //         .subscribe( () => {
+        //             this.uiManager.hideProgressBar()
+        //             this.uiManager.navigateTo('/')
+        //         } );;
     }
 
     getValues(): Place {
@@ -131,20 +130,8 @@ export class PlaceCreatePage implements OnInit {
         this.dbService
                 .addRestaurant({...newPlace})
                 .then(res => (console.log(res)))
-                .catch(res => (console.log(res)))
-                
-                
-                // .insertPlace(newPlace)
-                // .subscribe( response => {
-                //     this.uiManager.hideProgressBar()
-                //     console.log(response)
-                //     if (!response == null) {
-                //         this.uiManager.alert('Erro', 'Restaurante já cadastrado com esse nome')
-                //     } else {
-                //         this.uiManager.navigateTo('/')
-                //     }
-                // } );
-        
+                .catch(err => (console.log(err)))
+
     }
   }
   

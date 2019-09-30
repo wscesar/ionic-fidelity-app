@@ -5,7 +5,7 @@
         <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     
-    <ion-title>Meus Pontos</ion-title>
+    <ion-title>Restaurantes</ion-title>
 
     <ion-buttons slot="end">
         <ion-menu-toggle>
@@ -31,15 +31,14 @@
                 
                 <ion-item-sliding *virtualItem="let place">
                     
-                    <ion-item detail [routerLink]="['/', 'promocoes', place.id]">
+                    <ion-item detail [routerLink]="['/', 'restaurante', place.id]">
         
-                        <ion-thumbnail slot="start" color="dark">
+                        <ion-thumbnail slot="start" class="ion-margin-right">
                             <ion-img [src]="place.image"></ion-img>
                         </ion-thumbnail>
     
-                        <ion-label>
+                        <ion-label class="ion-margin">
                             <h2>{{ place.title }}</h2>
-                            <p>Meus pontos: {{ place.score }}</p>
                         </ion-label>
 
                     </ion-item>

@@ -32,6 +32,11 @@ export class ProductCreatePage implements OnInit {
     ngOnInit() {
         this.paramPlace =  this.route.snapshot.paramMap.get('place');
 
+        this.dbService.getRestaurant(this.paramPlace).subscribe(res => {
+            console.log(res)
+            // this.product = res
+        })
+
         this.form = new FormGroup({
             
             product: new FormControl(null, {
@@ -64,10 +69,10 @@ export class ProductCreatePage implements OnInit {
         );
 
         this.dbService
-                .updateProducts(this.paramPlace, newProduct)
-                .subscribe( () => {
+                .addProduct(this.paramPlace, newProduct)
+                .then( () => {
                     this.uiManager.hideProgressBar();
-                    this.uiManager.navigateTo('/promocoes/'+this.paramPlace);
+                    this.uiManager.navigateTo('/');
                 });
 
     }

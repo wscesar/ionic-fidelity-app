@@ -9,12 +9,10 @@ import { UiManagerService } from '../services/ui-manager.service';
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.page.html',
-  styleUrls: ['./product-detail.page.sass'],
 })
 export class ProductDetailPage implements OnInit {
 
-    private placeSubscription: Subscription;
-    private isLoading: boolean;
+    private isLoading: boolean = true;
     private image: string;
     private title: string;
     private productScore: number;
@@ -35,51 +33,24 @@ export class ProductDetailPage implements OnInit {
         private uiManager: UiManagerService
     ) { }
     
-
-    ionViewWillEnter(){
-        
-        this.isLoading = true;
-        this.dbService.fetchPlaces().subscribe(() => {
-            this.isLoading = false;
-            this.getUserScore();
-            this.getProductData();
-            this.toggleButton();
-        });
-
-    }
-
-
     ngOnInit() {
         this.paramPlace = this.route.snapshot.paramMap.get("place");
-        this.paramProduct = this.route.snapshot.paramMap.get("product");
+        this.paramProduct = this.route.snapshot.paramMap.get("productId");
 
-        this.placeSubscription = this.dbService.getPlaces.subscribe(response => {
-            this.places = response;
+        this.dbService.getProduct(this.paramPlace, this.paramProduct).subscribe(product =>{
+            this.product = product
+            this.title = product.title;
+            this.image = product.image;
+            this.productScore = product.score;
+            this.isLoading = false;
+            // this.toggleButton();
+        });
+
+        this.dbService.getRestaurant(this.paramPlace).subscribe(restaurant => {
+            this.place = restaurant;
         });
 
     }
-
-     getUserScore() {
-        for ( let place of this.places )  {
-            if ( place.title === this.paramPlace ) {
-                this.userScore = place.score;
-            }
-        }
-    }
-
-
-    getProductData() {
-        let products = this.dbService.getProducts(this.paramPlace);
-
-        for ( let product of products ) {
-            if ( product.title === this.paramProduct ) {
-                this.title = product.title;
-                this.image = product.image;
-                this.productScore = product.score;
-            }
-        }
-    }
-
 
     toggleButton() {
         for ( let place of this.places ) {
