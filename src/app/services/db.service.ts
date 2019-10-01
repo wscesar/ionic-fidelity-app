@@ -1,65 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-
-import * as firebase from 'firebase';
-
-import { Place } from '../model/place.model';
-import { BehaviorSubject, Observable, Subscriber, Subscribable } from 'rxjs';
-import { Product } from '../model/product.model';
+import { map } from 'rxjs/operators';
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 
-
-// interface productModel {
-//     title: string,
-//     score: number,
-//     image: string
-// }
-export interface AuthResponseData {
-    kind: string;
-    idToken: string;
-    email: string;
-    refreshToken: string;
-    expiresIn: string;
-    localId: string;
-    registered?: boolean;
-}
+import { Place } from '../model/place.model';
+import { Product } from '../model/product.model';
 
 @Injectable({ providedIn: 'root' })
 export class DBService {
-    restaurants: Observable<any[]>;
 
-    private places: Place[];
-    private product: Product;
-    // private baseUrl = 'https://my-dummy-database.firebaseio.com/restaurants.json';
-    private signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCP3Zn7rkATaRdv_oIan2JHcS8YtDfJecc'
-    private signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCP3Zn7rkATaRdv_oIan2JHcS8YtDfJecc'
-    private token: string = null;
-
-    constructor (
-        private db: AngularFirestore,
-        private http: HttpClient ) {}
-
-    signIn( email: string, password: string ) {
-        // return this.http.post( this.signInUrl, { email, password } )
-        firebase.auth().signInWithEmailAndPassword(email, password)
-        .catch(error => {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-
-            console.log(errorMessage)
-            
-        });
-    }
-    
-    signUp( email: string, password: string ) {
-        return this.http.post( this.signUpUrl, { email, password } )
-    }
-
-    setToken(token: string) {
-        this.token = token;
-    }
+    constructor (private db: AngularFirestore ) {}
 
     getRestaurants() {
         return this.db

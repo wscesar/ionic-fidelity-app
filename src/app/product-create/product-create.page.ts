@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { LoadingController, AlertController, NavController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
 import { Product } from '../model/product.model';
 import { DBService } from '../services/db.service';
 import { UiManagerService } from '../services/ui-manager.service';
@@ -14,25 +11,21 @@ import { UiManagerService } from '../services/ui-manager.service';
   templateUrl: './product-create.page.html',
 })
 export class ProductCreatePage implements OnInit {
-    baseUrl = 'https://my-dummy-database.firebaseio.com/products.json';
     form: FormGroup;
     product: Product;
     products: Product[];
-    subscription: Subscription;
-    paramPlace: string;
+    restaurantId: string;
 
     constructor(
-        private router: Router,
-        private http: HttpClient,
         private dbService: DBService,
         private uiManager: UiManagerService,
         private route: ActivatedRoute
     ) {}
 
     ngOnInit() {
-        this.paramPlace =  this.route.snapshot.paramMap.get('place');
+        this.restaurantId =  this.route.snapshot.paramMap.get('place');
 
-        this.dbService.getRestaurant(this.paramPlace).subscribe(res => {
+        this.dbService.getRestaurant(this.restaurantId).subscribe(res => {
             console.log(res)
             // this.product = res
         })
@@ -58,7 +51,7 @@ export class ProductCreatePage implements OnInit {
     }
 
     
-    onFormSubmit() {
+    onSubmit() {
 
         this.uiManager.showLoading();
 
@@ -69,7 +62,7 @@ export class ProductCreatePage implements OnInit {
         );
 
         this.dbService
-                .addProduct(this.paramPlace, newProduct)
+                .addProduct(this.restaurantId, newProduct)
                 .then( () => {
                     this.uiManager.hideProgressBar();
                     this.uiManager.navigateTo('/');

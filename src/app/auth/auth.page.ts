@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { DBService } from '../services/db.service';
-import { AuthService } from './auth.service';
+
+import { UiManagerService } from '../services/ui-manager.service';
+import { AuthService } from '../services/auth.service';
+
 
 
 @Component({
@@ -11,19 +14,20 @@ import { AuthService } from './auth.service';
 export class AuthPage implements OnInit {
 
     form: FormGroup;
-    f: NgForm
+    authMode = 'login';
+    authMode02 = "criar conta"
 
-    constructor(private dbService: DBService) {}
+    constructor(private authService: AuthService) {}
 
     ngOnInit() {
         this.form = new FormGroup({
 
-            email: new FormControl(null, {
+            email: new FormControl('bbi@bbi.com', {
                 updateOn: 'blur',
                 validators: [Validators.required]
             }),
 
-            password: new FormControl(null, {
+            password: new FormControl('combbifood', {
                 updateOn: 'blur',
                 validators: [Validators.required]
             })
@@ -31,25 +35,27 @@ export class AuthPage implements OnInit {
         });
     }
 
-    log(f: NgForm){
-        console.log(f.value.email)
+    
+    onChangeMode() {
+        if ( this.authMode === 'login' ) {
+            this.authMode = 'criar conta'
+            this.authMode02 = 'login'
+        } else {
+            this.authMode = 'login'
+            this.authMode02 = 'criar conta'
+        }
     }
-    // onSubmit(email: string, password: string) {
-    //     this.dbService.signUp(email, password)
-    // }
-
+    
+    
     onSubmit() {
-        this.dbService.signIn(
-            this.form.value.email, 
-            this.form.value.password
-        )
-        // .then(
-        //     res => {
-        //         console.log(res)
-        //         // this.dbService.setToken(res.idToken)
-        //     },
-        //     err => console.log(err)
-        // );
+        let email = this.form.value.email;
+        let password = this.form.value.password;
+
+        if ( this.authMode === 'login' ) {
+            this.authService.loginWithEmail(email, password)
+        } else {
+            this.authService.createUser(email, password)
+        }
     }
 
 }
